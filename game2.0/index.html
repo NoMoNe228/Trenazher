@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+    <meta charset="UTF-8">
+    <title>TypeRush Clone</title>
+    <style>
+        /* старые стили */
+        body { font-family: monospace; background: #1e1e1e; color: #fff; text-align: center; padding-top: 50px; }
+        .header { display: flex; justify-content: space-around; font-size: 20px; margin-bottom: 30px; }
+        #text-to-type { font-size: 28px; letter-spacing: 2px; line-height: 1.5; max-width: 800px; margin: 0 auto; }
+        .correct { color: #4caf50; }
+        .incorrect { color: #f44336; background: #500; border-radius: 3px; }
+        .current { border-bottom: 3px solid #fff; }
+        #hidden-input { position: absolute; opacity: 0; top: 0; left: 0; }
+        #game-over { display: none; margin-top: 30px; font-size: 24px; }
+        button { padding: 10px 20px; font-size: 18px; cursor: pointer; }
+
+        /*Новые стили*/
+        #keyboard-container { margin-top: 30px; display: flex; justify-content: center; }
+        .kb-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 6px; }
+        .key {
+            width: 45px; height: 45px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: bold; color: #333;
+            background: #e2e8f0; border: 1px solid #cbd5e1;
+            transition: all 0.1s;
+        }
+        .finger-1, .finger-8 { background: #fbcfe8; }
+        .finger-2, .finger-7 { background: #fed7aa; }
+        .finger-3, .finger-6 { background: #fef08a; }
+        .finger-4 { background: #bbf7d0; }
+        .finger-5 { background: #bae6fd; }
+        .key.active {
+            transform: scale(1.15);
+            outline: 3px solid #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            z-index: 10;
+        }
+
+        /* стили для тряски */
+        .shake { animation: shake 0.25s; }
+        @keyframes shake {
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* стили для меню */
+        .level-card {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            width: 200px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .level-card:hover {
+            border-color: #f59e0b;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.2);
+        }
+        .level-card h2 { color: #f59e0b; margin-top: 0; }
+        .level-card p { font-size: 14px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <!-- 1. НОВЫЙ ЭКРАН: МЕНЮ -->
+    <div id="start-screen" style="padding: 50px; text-align: center;">
+        <h1 style="color: #f59e0b; font-size: 48px; margin-bottom: 10px;">ТВОЙ ЛИЧНЫЙ ТРЕНАЖЕР СКОРОПЕЧАТИ</h1>
+        <p style="font-size: 20px; margin-bottom: 40px;">Выбери свой уровень сложности, чтобы начать тренировку</p>
+
+        <div style="display: flex; justify-content: center; gap: 20px;">
+            <div class="level-card" onclick="startGame('infinite')">
+                <h2>♾️ Бесконечный</h2>
+                <p>Случайные символы и цифры. Проверь свою выдержку!</p>
+            </div>
+
+            <div class="level-card" onclick="startGame('easy')">
+                <h2>🌱 Простой</h2>
+                <p>Печать простых слов. Идеально для разминки.</p>
+            </div>
+
+            <div class="level-card" onclick="startGame('hard')">
+                <h2>🔥 Сложный</h2>
+                <p>Связные тексты и фрагменты кода. Для настоящих профи.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. ИГРОВОЙ ЭКРАН (СПРЯТАН) -->
+    <div id="game-screen" style="display: none;">
+        <div class="header">
+            <div>⏱ Время: <span id="timer">30</span>с</div>
+            <div>💀 Ошибки: <span id="mistakes">0</span></div>
+            <div>⭐ Очки: <span id="points">0</span></div>
+            <!-- НОВОЕ: Комбо и Уровень -->
+            <div>🔥 Комбо: <span id="combo">0</span> (x<span id="multiplier">1</span>)</div>
+            <div>🏆 Уровень: <span id="level">1</span></div>
+        </div>
+
+        <div id="text-to-type"></div>
+
+        <div id="keyboard-container">
+            <div id="keyboard"></div>
+        </div>
+
+        <input type="text" id="hidden-input" autofocus>
+
+        <div id="game-over">
+            <h2>Игра окончена!</h2>
+            <p>Скорость: <span id="wpm">0</span> слов/мин</p>
+            <p>Заработано очков: <span id="earned">0</span></p>
+
+            <p>
+                Твое имя: <input type="text" id="playerName" placeholder="Введи имя..." style="padding: 5px; font-size: 16px; color: black;">
+            </p>
+            <button onclick="saveResult()" style="background-color: #4caf50; color: white; border: none; margin-right: 10px;">Сохранить результат</button>
+            <button onclick="restartGame()">В меню</button>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
