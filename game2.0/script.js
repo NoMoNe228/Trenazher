@@ -1,4 +1,4 @@
-// --- БИБЛИОТЕКА ТЕКСТОВ ---
+// --- БИБЛИОТЕКА ТЕКСТОВ (fallback, если сервер недоступен) ---
 const library = {
     sentences_ru: [
         "Привет мир это простой тренажер печати",
@@ -113,7 +113,19 @@ function updateSubmodes(mode) {
     }
 }
 
-function getTextForLevel() {
+// Запрос случайной цитаты с сервера
+async function fetchRandomQuote() {
+    // ✅ Вариант 1: quotes.js загружен — берём из локального массива.
+    // Работает при открытии index.html двойным кликом (file://).
+    if (Array.isArray(window.QUOTES) && window.QUOTES.length > 0) {
+        const randomIndex = Math.floor(Math.random() * window.QUOTES.length);
+        const picked = window.QUOTES[randomIndex];
+        console.log('📖 Цитата из quotes.js:', picked.id, '—', picked.quote);
+        return picked.quote;
+    }
+}
+
+async function getTextForLevel() {
     const mode = document.querySelector('input[name="mode"]:checked').value;
     const submode = document.getElementById('submodeSelect').value;
     const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -121,21 +133,25 @@ function getTextForLevel() {
     if (mode === 'symbols') {
         const chars = "!@#$%^&*()_+-=[]{};':\",./<>?1234567890";
         let res = "";
-        for(let i=0; i<30; i++) res += chars[Math.floor(Math.random() * chars.length)];
+        for (let i = 0; i < 30; i++) res += chars[Math.floor(Math.random() * chars.length)];
         return res;
     } else if (mode === 'code') {
         if (submode === 'python') return getRandom(library.code_python);
-        if (submode === 'js') return getRandom(library.code_js);
-        if (submode === 'html') return getRandom(library.code_html);
+        if (submode === 'js')     return getRandom(library.code_js);
+        if (submode === 'html')   return getRandom(library.code_html);
     } else {
-        if (submode === 'ru') return getRandom(library.sentences_ru);
+        if (submode === 'ru') {
+            const quote = await fetchRandomQuote();       // ← из БД
+            if (quote) return quote;
+            return getRandom(library.sentences_ru);       // ← fallback
+        }
         if (submode === 'en') return getRandom(library.sentences_en);
     }
     return "Ошибка генерации";
 }
 
 // --- ИГРА ---
-function startGame(difficulty) {
+async function startGame(difficulty) {
     currentDifficulty = difficulty;
 
     document.getElementById('start-screen').style.display = 'none';
@@ -144,7 +160,7 @@ function startGame(difficulty) {
 
     input = "";
     mistakes = 0;
-    isGameActive = true;
+    isGameActive = false;    // заблокируем ввод, пока грузится цитата
     startTime = null;
     currentCombo = 0;
 
@@ -154,7 +170,6 @@ function startGame(difficulty) {
     document.getElementById('mistakes').textContent = 0;
     document.getElementById('points').textContent = 0;
 
-    // Настройка сложности
     const timerBox = document.getElementById('timerBox');
     if (difficulty === 'easy' || difficulty === 'medium') {
         timerBox.style.display = 'none';
@@ -165,7 +180,8 @@ function startGame(difficulty) {
         document.getElementById('timer').textContent = timer;
     }
 
-    currentText = getTextForLevel();
+    currentText = await getTextForLevel();   // ← ждём цитату с сервера
+    isGameActive = true;                     // теперь можно печатать
 
     renderText();
     renderKeyboard('ru');
@@ -204,32 +220,29 @@ function renderText() {
 }
 
 inputField.addEventListener('input', (e) => {
-    if (!isGameActive) return;
+    if (!isGameActive) { e.target.value = input; return; }
     if (!startTime) startTime = Date.now();
-    
+
     const oldInputLength = input.length;
     input = e.target.value;
-    
-    // Если игрок что-то напечатал (добавил символ)
+
     if (input.length > oldInputLength) {
         const lastTyped = input[input.length - 1];
         const expected = currentText[input.length - 1];
-        
+
         if (lastTyped !== expected) {
-            // ОШИБКА
             playErrorSound();
             textContainer.classList.add('shake');
             setTimeout(() => textContainer.classList.remove('shake'), 250);
             currentCombo = 0;
-            mistakes++; // <--- ВОТ ЗДЕСЬ МЫ ПРИБАВЛЯЕМ ОШИБКУ НАВСЕГДА
-            document.getElementById('mistakes').textContent = mistakes; // Обновляем счетчик на экране
+            mistakes++;
+            document.getElementById('mistakes').textContent = mistakes;
 
             if (currentDifficulty === 'medium' || currentDifficulty === 'hard') {
                 endGame("Ошибка! Игра окончена.");
                 return;
             }
         } else {
-            // ПРАВИЛЬНО
             currentCombo++;
         }
 
@@ -242,10 +255,8 @@ inputField.addEventListener('input', (e) => {
         document.getElementById('multiplier').textContent = multiplier;
     }
 
-    // Обновляем текст на экране (подсветку)
     renderText();
-    
-    // Если текст набран до конца
+
     if (input.length >= currentText.length) {
         endGame("Текст набран!");
     }
@@ -281,7 +292,7 @@ function endGame(reason) {
         else if (mistakes <= 15) earned = 40;
         else earned = 20;
     }
-    earned += Math.floor(currentCombo / 10) * 10; // Бонус за комбо
+    earned += Math.floor(currentCombo / 10) * 10;
 
     document.getElementById('earned').textContent = earned;
     document.getElementById('points').textContent = earned;
@@ -373,5 +384,3 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('themeBtn').textContent = "🌙 Сменить тему";
     }
 });
-
-
