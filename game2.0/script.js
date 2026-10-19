@@ -206,25 +206,30 @@ function renderText() {
 inputField.addEventListener('input', (e) => {
     if (!isGameActive) return;
     if (!startTime) startTime = Date.now();
-
+    
     const oldInputLength = input.length;
     input = e.target.value;
-
+    
+    // Если игрок что-то напечатал (добавил символ)
     if (input.length > oldInputLength) {
         const lastTyped = input[input.length - 1];
         const expected = currentText[input.length - 1];
-
+        
         if (lastTyped !== expected) {
+            // ОШИБКА
             playErrorSound();
             textContainer.classList.add('shake');
             setTimeout(() => textContainer.classList.remove('shake'), 250);
             currentCombo = 0;
+            mistakes++; // <--- ВОТ ЗДЕСЬ МЫ ПРИБАВЛЯЕМ ОШИБКУ НАВСЕГДА
+            document.getElementById('mistakes').textContent = mistakes; // Обновляем счетчик на экране
 
             if (currentDifficulty === 'medium' || currentDifficulty === 'hard') {
                 endGame("Ошибка! Игра окончена.");
                 return;
             }
         } else {
+            // ПРАВИЛЬНО
             currentCombo++;
         }
 
@@ -237,15 +242,10 @@ inputField.addEventListener('input', (e) => {
         document.getElementById('multiplier').textContent = multiplier;
     }
 
-    let currentMistakes = 0;
-    for (let i = 0; i < input.length; i++) {
-        if (input[i] !== currentText[i]) currentMistakes++;
-    }
-    mistakes = currentMistakes;
-    document.getElementById('mistakes').textContent = mistakes;
-
+    // Обновляем текст на экране (подсветку)
     renderText();
-
+    
+    // Если текст набран до конца
     if (input.length >= currentText.length) {
         endGame("Текст набран!");
     }
