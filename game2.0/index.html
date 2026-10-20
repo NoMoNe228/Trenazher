@@ -5,9 +5,11 @@
     <title>Тренируй скоропечать!</title>
     <style>
         /* --- БАЗОВЫЕ СТИЛИ --- */
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         body {
-            font-family: monospace;
             background: #1e1e1e;
             color: #fff;
             text-align: center;
@@ -22,7 +24,16 @@
         #hidden-input { position: absolute; opacity: 0; top: 0; left: 0; }
         #game-over { display: none; margin-top: 30px; font-size: 24px; background: #1e293b; padding: 20px; border-radius: 12px; }
 
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 8px; border: none; font-weight: bold; }
+        button { 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            border: none; 
+            font-weight: 600; 
+            transition: opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; }
 
         /* --- ВЕРХНЯЯ ПАНЕЛЬ --- */
         header#main-header {
@@ -52,8 +63,8 @@
         .finger-5 { background: #bae6fd; }
         .key.active {
             transform: scale(1.15);
-            outline: 3px solid #fff;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            outline: 3px solid #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
             z-index: 10;
         }
 
@@ -68,16 +79,31 @@
         .level-card {
             background: #1e293b;
             border: 2px solid #334155;
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 20px;
-            width: 200px;
+            flex: 1; /* Карточки одинаковой ширины */
+            min-width: 200px;
             cursor: pointer;
             transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
         }
         .level-card:hover {
-            border-color: #f59e0b;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.2);
+            border-color: #38bdf8; /* Голубая подсветка */
+            background: #0f172a;
+            transform: translateY(-2px);
+        }
+        .level-card h2 {
+            margin-top: 0;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .level-card p {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 0;
+            line-height: 1.4;
         }
 
         /* --- СВЕТЛАЯ ТЕМА --- */
@@ -88,64 +114,39 @@
         body.light-theme label { color: #334155 !important; }
         body.light-theme .level-card { background: #f1f5f9; border-color: #cbd5e1; }
         body.light-theme .level-card p { color: #475569; }
-                /* Цвета клавиатуры для светлой темы (сохраняем цвета пальцев) */
         body.light-theme .key {
             color: #1e293b;
             border: 1px solid #cbd5e1;
-            /* Убрали background: #e2e8f0, чтобы не перебивать цвета пальцев */
         }
         body.light-theme .key.active { outline: 3px solid #2563eb; }
         body.light-theme header#main-header { background: #e2e8f0 !important; border-bottom: 1px solid #cbd5e1 !important; }
-
-                /* --- ИСПРАВЛЕНИЯ ДЛЯ СВЕТЛОЙ ТЕМЫ --- */
-
-        /* 1. Окно результатов (game-over) */
         body.light-theme #game-over {
             background: #ffffff;
             border: 1px solid #e2e8f0;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             color: #1e293b;
         }
-
-        /* 2. Текст причины ошибки (красный) оставляем, но делаем чуть темнее для контраста */
-        body.light-theme #game-over-reason {
-            color: #dc2626 !important;
-        }
-
-        /* 3. Поле ввода имени в результатах */
+        body.light-theme #game-over-reason { color: #dc2626 !important; }
         body.light-theme #playerName {
             border: 1px solid #cbd5e1 !important;
             background: #f8fafc !important;
             color: #1e293b !important;
         }
-
-        /* 4. Кнопка "В меню" в результатах */
         body.light-theme #game-over button:nth-child(2) {
             background-color: #e2e8f0 !important;
             color: #1e293b !important;
             border: 1px solid #cbd5e1 !important;
         }
-        body.light-theme #game-over button:nth-child(2):hover {
-            background-color: #cbd5e1 !important;
-        }
-
-        /* 5. Блок выбора в меню (тот, что с радио-кнопками) */
-        body.light-theme #start-screen > div {
-            background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
-        }
-
-        /* 6. Выпадающий список (выбор языка/кода) в светлой теме */
+        body.light-theme #game-over button:nth-child(2):hover { background-color: #cbd5e1 !important; }
         body.light-theme #submodeSelect {
             background: #f8fafc !important;
             color: #1e293b !important;
             border: 1px solid #cbd5e1 !important;
         }
-                /* --- СТИЛИ ДЛЯ ОКНА РЕЗУЛЬТАТОВ (УНИВЕРСАЛЬНЫЕ) --- */
 
-        /* Блок ввода имени */
+        /* --- СТИЛИ ДЛЯ ОКНА РЕЗУЛЬТАТОВ --- */
         .name-input-box {
-            background: #0f172a; /* Темный фон для темной темы */
+            background: #0f172a;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 30px;
@@ -155,11 +156,7 @@
             gap: 10px;
             border: 1px solid #334155;
         }
-
-        .name-input-box span {
-            color: #cbd5e1;
-        }
-
+        .name-input-box span { color: #cbd5e1; }
         .name-input-box input {
             padding: 8px;
             font-size: 16px;
@@ -169,91 +166,54 @@
             border-radius: 5px;
             outline: none;
         }
-
         .btn-save {
-            background-color: #4caf50;
+            background-color: #0ea5e9;
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
         }
-
-        /* Кнопка "В меню" */
         .btn-menu {
-            background-color: #475569; /* Серый для темной темы */
+            background-color: #475569;
             color: white;
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
         }
+        body.light-theme .name-input-box { background: #f1f5f9; border: 1px solid #cbd5e1; }
+        body.light-theme .name-input-box span { color: #1e293b; }
+        body.light-theme .name-input-box input { color: #1e293b; background: #ffffff; border: 1px solid #cbd5e1; }
+        body.light-theme .btn-menu { background-color: #cbd5e1; color: #1e293b; }
 
-        /* --- АДАПТАЦИЯ ДЛЯ СВЕТЛОЙ ТЕМЫ --- */
-        body.light-theme .name-input-box {
-            background: #f1f5f9; /* Светлый фон */
-            border: 1px solid #cbd5e1;
-        }
-
-        body.light-theme .name-input-box span {
-            color: #1e293b; /* Темный текст */
-        }
-
-        body.light-theme .name-input-box input {
-            color: #1e293b;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-        }
-
-        body.light-theme .btn-menu {
-            background-color: #cbd5e1; /* Светло-серый для светлой темы */
-            color: #1e293b;
-        }
-                /* --- ЦВЕТА ДЛЯ ЗАГОЛОВКА "ИГРА ОКОНЧЕНА" --- */
-
-        /* По умолчанию (для темной темы) - белый */
-        #game-over h2 {
-            color: #ffffff;
-        }
-
-        /* Для светлой темы - темно-синий */
-        body.light-theme #game-over h2 {
-            color: #1e293b;
-        }
+        /* --- ЦВЕТА ДЛЯ ЗАГОЛОВКА "ИГРА ОКОНЧЕНА" --- */
+        #game-over h2 { color: #ffffff; }
+        body.light-theme #game-over h2 { color: #1e293b; }
     </style>
 </head>
 <body>
     <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
     <header id="main-header">
-        <button onclick="toggleTheme()" id="themeBtn" style="background: #334155; color: #fff;">🌙 Сменить тему</button>
-        <button onclick="openProfile()" style="background: #2563eb; color: #fff;">👤 Личный кабинет</button>
+        <button onclick="toggleTheme()" id="themeBtn" style="background: #475569; color: #fff;">Сменить тему</button>
+        <button onclick="openProfile()" style="background: #0ea5e9; color: #fff;">Личный кабинет</button>
     </header>
 
     <!-- 2. ГЛАВНОЕ МЕНЮ -->
     <div id="start-screen" style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; text-align: center;">
-
-        <h1 style="color: #2563eb; font-size: 42px; margin-bottom: 10px;">Печать Героя</h1>
-        <p style="font-size: 18px; color: #64748b; margin-bottom: 30px; line-height: 1.5;">
+        <h1 style="color: #38bdf8; font-size: 48px; margin-bottom: 10px; font-weight: 600;">Тренажер слепой печати</h1>
+        <p style="font-size: 18px; color: #94a3b8; margin-bottom: 30px; line-height: 1.6;">
             Добро пожаловать в интерактивный тренажер слепой печати!<br>
             Тренируй скорость, точность каждый день и стань настоящим мастером клавиатуры.
         </p>
 
         <div style="margin-bottom: 40px;">
-            <button onclick="openProfile()" style="background: #f59e0b; color: #000; font-size: 16px;">
+            <button onclick="openProfile()" style="background: #0ea5e9; color: #fff; font-size: 16px; padding: 12px 25px;">
                 Войти в аккаунт (чтобы сохранять прогресс)
             </button>
         </div>
 
         <!-- Блок выбора -->
-        <div style="background: #1e293b; padding: 30px; border-radius: 15px; border: 1px solid #334155; text-align: left;">
-
-            <h3 style="color: #fff; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px;">1. Что будем печатать?</h3>
-
+        <div style="background: #1e293b; padding: 30px; border-radius: 8px; border: 1px solid #334155; text-align: left;">
+            <h3 style="color: #38bdf8; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px; font-weight: 500;">1. Что будем печатать?</h3>
             <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
                 <label style="cursor: pointer; color: #cbd5e1; display: flex; align-items: center; gap: 5px;">
                     <input type="radio" name="mode" value="sentences" checked onchange="updateSubmodes('sentences')"> Предложения
+                </label>
+                <label style="cursor: pointer; color: #cbd5e1; display: flex; align-items: center; gap: 5px;">
+                    <input type="radio" name="mode" value="words" onchange="updateSubmodes('words')"> Слова
                 </label>
                 <label style="cursor: pointer; color: #cbd5e1; display: flex; align-items: center; gap: 5px;">
                     <input type="radio" name="mode" value="symbols" onchange="updateSubmodes('symbols')"> Спецсимволы
@@ -264,41 +224,37 @@
             </div>
 
             <div style="margin-bottom: 30px;">
-                <select id="submodeSelect" style="padding: 10px; font-size: 16px; border-radius: 8px; background: #0f172a; color: #fff; border: 1px solid #334155; width: 200px;">
+                <select id="submodeSelect" style="padding: 10px; font-size: 16px; border-radius: 6px; background: #0f172a; color: #fff; border: 1px solid #334155; width: 200px;">
                     <option value="ru">Русский язык</option>
                     <option value="en">English language</option>
                 </select>
             </div>
 
-            <h3 style="color: #fff; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px;">2. Уровень сложности</h3>
-
-            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <h3 style="color: #38bdf8; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px; font-weight: 500;">2. Уровень сложности</h3>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: stretch;">
                 <div class="level-card" onclick="startGame('easy')">
-                    <h2 style="color: #4ade80; margin: 0 0 10px 0;">🌱 Легкий</h2>
-                    <p style="margin: 0; font-size: 14px; color: #94a3b8;">Время не ограничено.<br>Ошибки не завершают игру.</p>
+                    <h2 style="color: #38bdf8;">Легкий</h2>
+                    <p>Время не ограничено.<br>Ошибки не завершают игру.</p>
                 </div>
-
                 <div class="level-card" onclick="startGame('medium')">
-                    <h2 style="color: #facc15; margin: 0 0 10px 0;">⚡ Нормальный</h2>
-                    <p style="margin: 0; font-size: 14px; color: #94a3b8;">Время не ограничено.<br>Одна ошибка — и игра окончена!</p>
+                    <h2 style="color: #818cf8;">Нормальный</h2>
+                    <p>Время не ограничено.<br>Одна ошибка — и игра окончена!</p>
                 </div>
-
                 <div class="level-card" onclick="startGame('hard')">
-                    <h2 style="color: #f87171; margin: 0 0 10px 0;">🔥 Сложный</h2>
-                    <p style="margin: 0; font-size: 14px; color: #94a3b8;">Время: 1 минута.<br>Ошибок быть не должно!</p>
+                    <h2 style="color: #c084fc;">Сложный</h2>
+                    <p>Время: 1 минута.<br>Ошибок быть не должно!</p>
                 </div>
             </div>
-
         </div>
     </div>
 
     <!-- 3. ИГРОВОЙ ЭКРАН -->
     <div id="game-screen" style="display: none; max-width: 1000px; margin: 0 auto; padding: 20px; text-align: center;">
         <div class="header">
-            <div id="timerBox">⏱ Время: <span id="timer">30</span>с</div>
-            <div> Ошибки: <span id="mistakes">0</span></div>
-            <div> Очки: <span id="points">0</span></div>
-            <div> Комбо: <span id="combo">0</span> (x<span id="multiplier">1</span>)</div>
+            <div id="timerBox">Время: <span id="timer">30</span>с</div>
+            <div>Ошибки: <span id="mistakes">0</span></div>
+            <div>Очки: <span id="points">0</span></div>
+            <div>Комбо: <span id="combo">0</span> (x<span id="multiplier">1</span>)</div>
         </div>
 
         <div id="text-to-type"></div>
@@ -310,46 +266,42 @@
         <input type="text" id="hidden-input" autofocus>
 
         <div id="game-over">
-
             <h2 style="margin-top: 0;">Игра окончена!</h2>
             <p id="game-over-reason" style="color: #dc2626; font-weight: bold; margin-bottom: 15px; font-size: 18px;"></p>
-
-                        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+            <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
                 <p style="margin: 0; font-size: 20px;">Скорость: <b><span id="wpm">0</span></b> сл/мин</p>
-                <p style="margin: 0; font-size: 20px;">За игру: <b style="color: #4ade80;"><span id="earned">0</span></b> очков</p>
-                <p style="margin: 0; font-size: 20px;">Всего: <b style="color: #f59e0b;"><span id="total-points">0</span></b> очков</p>
+                <p style="margin: 0; font-size: 20px;">За игру: <b style="color: #38bdf8;"><span id="earned">0</span></b> очков</p>
+                <p style="margin: 0; font-size: 20px;">Всего: <b style="color: #818cf8;"><span id="total-points">0</span></b> очков</p>
             </div>
 
-           <div class="name-input-box">
-             <span>Введи имя:</span>
-            <input type="text" id="playerName" placeholder="Твое имя...">
-             <button onclick="saveResult()" class="btn-save">Сохранить</button>
-           </div>
+            <div class="name-input-box">
+                <span>Введи имя:</span>
+                <input type="text" id="playerName" placeholder="Твое имя...">
+                <button onclick="saveResult()" class="btn-save">Сохранить</button>
+            </div>
 
-            <!-- БЛОК С КНОПКАМИ ДЕЙСТВИЙ -->
             <div style="display: flex; justify-content: center; gap: 15px;">
-                <button onclick="playAgain()" style="background-color: #2563eb; color: white; padding: 12px 25px; font-size: 16px;"> Играть еще</button>
-                <button onclick="restartGame()" class="btn-menu"> В меню</button>
-                <button onclick="openStats()" style="background-color: #f59e0b; color: #000; padding: 12px 25px; font-size: 16px;"> Статистика</button>
+                <button onclick="playAgain()" style="background-color: #0ea5e9; color: white;">Играть еще</button>
+                <button onclick="restartGame()" class="btn-menu">В меню</button>
+                <button onclick="openStats()" style="background-color: #818cf8; color: white;">Статистика</button>
             </div>
         </div>
-
     </div>
 
     <!-- 4. МОДАЛЬНОЕ ОКНО ПРОФИЛЯ -->
     <div id="profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center;">
-        <div style="background: #1e293b; padding: 30px; border-radius: 12px; width: 350px; text-align: center; border: 1px solid #334155;">
+        <div style="background: #1e293b; padding: 30px; border-radius: 8px; width: 350px; text-align: center; border: 1px solid #334155;">
             <div id="auth-form">
-                <h2 style="color: #f59e0b; margin-top: 0;">Вход / Регистрация</h2>
+                <h2 style="color: #38bdf8; margin-top: 0;">Вход / Регистрация</h2>
                 <p style="color: #94a3b8; font-size: 14px;">Войди, чтобы сохранять свой прогресс</p>
                 <input type="text" id="username" placeholder="Твое имя" style="width: 90%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none; color: #000;">
                 <input type="password" id="password" placeholder="Пароль" style="width: 90%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: none; color: #000;">
-                <button onclick="loginUser()" style="background: #4ade80; color: #000; width: 100%; margin-bottom: 10px;">Войти</button>
+                <button onclick="loginUser()" style="background: #0ea5e9; color: #fff; width: 100%; margin-bottom: 10px;">Войти</button>
                 <button onclick="closeProfile()" style="background: transparent; color: #94a3b8;">Отмена</button>
             </div>
 
             <div id="user-profile" style="display: none;">
-                <h2 style="color: #4ade80; margin-top: 0;">Привет, <span id="profile-name"></span>!</h2>
+                <h2 style="color: #38bdf8; margin-top: 0;">Привет, <span id="profile-name"></span>!</h2>
                 <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left; color: #fff;">
                     <p><b>Лучший результат:</b> <span id="profile-best">0</span> очков</p>
                     <p><b>Всего очков:</b> <span id="profile-total">0</span></p>
@@ -360,15 +312,17 @@
             </div>
         </div>
     </div>
-        <!-- МОДАЛЬНОЕ ОКНО РЕСТАРТА -->
+
+    <!-- МОДАЛЬНОЕ ОКНО РЕСТАРТА -->
     <div id="restart-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 110; align-items: center; justify-content: center;">
-        <div style="background: #1e293b; padding: 30px; border-radius: 12px; width: 400px; text-align: center; border: 1px solid #334155;">
+        <div style="background: #1e293b; padding: 30px; border-radius: 8px; width: 400px; text-align: center; border: 1px solid #334155;">
             <h2 style="color: #fff; margin-top: 0;">Настройки новой игры</h2>
 
             <div style="text-align: left; margin-bottom: 20px;">
                 <label style="color: #cbd5e1; font-size: 14px;">Режим:</label>
                 <select id="restartMode" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border-radius: 5px; background: #0f172a; color: #fff; border: 1px solid #334155;">
                     <option value="sentences">Предложения</option>
+                    <option value="words">Слова</option>
                     <option value="symbols">Спецсимволы</option>
                     <option value="code">Код</option>
                 </select>
@@ -382,9 +336,9 @@
 
             <h3 style="color: #fff; margin-bottom: 15px;">Сложность:</h3>
             <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-                <button onclick="quickStart('easy')" style="background: #4ade80; color: #000; padding: 10px; flex: 1;">🌱 Легкий</button>
-                <button onclick="quickStart('medium')" style="background: #facc15; color: #000; padding: 10px; flex: 1;">⚡ Норм</button>
-                <button onclick="quickStart('hard')" style="background: #f87171; color: #000; padding: 10px; flex: 1;">🔥 Слож</button>
+                <button onclick="quickStart('easy')" style="background: #38bdf8; color: #000; padding: 10px; flex: 1;">Легкий</button>
+                <button onclick="quickStart('medium')" style="background: #818cf8; color: #fff; padding: 10px; flex: 1;">Норм</button>
+                <button onclick="quickStart('hard')" style="background: #c084fc; color: #fff; padding: 10px; flex: 1;">Слож</button>
             </div>
 
             <button onclick="closeRestart()" style="background: transparent; color: #94a3b8; border: none; cursor: pointer;">Отмена</button>
