@@ -569,3 +569,106 @@ function openStats() {
 function closeStats() {
     document.getElementById('stats-modal').style.display = 'none';
 }
+// --- ДОСТИЖЕНИЯ ---
+const achievementsList = [
+    { id: "first_game", title: "Первый шаг", desc: "Завершить первую тренировку", icon: "🚀" },
+    { id: "combo_10", title: "В ударе", desc: "Достичь комбо x2 (10 символов подряд)", icon: "🔥" },
+    { id: "combo_50", title: "Машина", desc: "Достичь комбо x5 (50 символов подряд)", icon: "⚡" },
+    { id: "wpm_60", title: "Скорострел", desc: "Достичь скорости 60 слов/мин", icon: "🏎️" },
+    { id: "wpm_100", title: "Печатный гений", desc: "Достичь скорости 100 слов/мин", icon: "🧠" },
+    { id: "no_mistakes", title: "Снайпер", desc: "Завершить текст без единой ошибки", icon: "🎯" },
+    { id: "code_master", title: "Кодер", desc: "Пройти тренировку в режиме «Код»", icon: "💻" },
+    { id: "polyglot", title: "Полиглот", desc: "Сыграть на русском и английском языках", icon: "🌍" },
+    { id: "marathon", title: "Марафонец", desc: "Провести 10 тренировок", icon: "🏃" },
+    { id: "rich", title: "Богач", desc: "Накопить 1000 очков", icon: "💎" }
+];
+
+function checkAchievements() {
+    const userStr = localStorage.getItem('currentUser');
+    if (!userStr) return;
+
+    let userData = JSON.parse(userStr);
+    if (!userData.achievements) userData.achievements = [];
+    
+    let newAchievements = [];
+    const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    const currentLang = document.getElementById('submodeSelect').value;
+    const wpm = parseFloat(document.getElementById('wpm').textContent) || 0;
+
+    // Проверяем условия
+    if (userData.runs >= 1 && !userData.achievements.includes("first_game")) newAchievements.push("first_game");
+    if (currentCombo >= 10 && !userData.achievements.includes("combo_10")) newAchievements.push("combo_10");
+    if (currentCombo >= 50 && !userData.achievements.includes("combo_50")) newAchievements.push("combo_50");
+    if (wpm >= 60 && !userData.achievements.includes("wpm_60")) newAchievements.push("wpm_60");
+    if (wpm >= 100 && !userData.achievements.includes("wpm_100")) newAchievements.push("wpm_100");
+    if (mistakes === 0 && window.lastGameReason === "Текст набран!" && !userData.achievements.includes("no_mistakes")) newAchievements.push("no_mistakes");
+    if (currentMode === 'code' && !userData.achievements.includes("code_master")) newAchievements.push("code_master");
+    if (userData.runs >= 10 && !userData.achievements.includes("marathon")) newAchievements.push("marathon");
+    if (userData.totalScore >= 1000 && !userData.achievements.includes("rich")) newAchievements.push("rich");
+
+    // Полиглот
+    if (!userData.langsPlayed) userData.langsPlayed = [];
+    if (!userData.langsPlayed.includes(currentLang) && currentLang !== 'all' && currentMode !== 'code') {
+        userData.langsPlayed.push(currentLang);
+    }
+    if (userData.langsPlayed.length >= 2 && !userData.achievements.includes("polyglot")) {
+        newAchievements.push("polyglot");
+    }
+
+    if (newAchievements.length > 0) {
+        newAchievements.forEach(id => userData.achievements.push(id));
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        
+        setTimeout(() => {
+            alert(`🏆 Новое достижение!\n\n${newAchievements.map(id => {
+                const ach = achievementsList.find(a => a.id === id);
+                return `${ach.icon} ${ach.title}`;
+            }).join('\n')}`);
+        }, 500);
+    }
+}
+
+function openAchievements() {
+    document.getElementById('achievements-modal').style.display = 'flex';
+    
+    const userStr = localStorage.getItem('currentUser');
+    if (!userStr) {
+        document.getElementById('achievements-auth-warning').style.display = 'block';
+        document.getElementById('achievements-list').style.display = 'none';
+        return;
+    }
+    
+    document.getElementById('achievements-auth-warning').style.display = 'none';
+    document.getElementById('achievements-list').style.display = 'grid';
+    
+    const user = JSON.parse(userStr);
+    const unlocked = user.achievements || [];
+    const listContainer = document.getElementById('achievements-list');
+    listContainer.innerHTML = "";
+
+    achievementsList.forEach(ach => {
+        const isUnlocked = unlocked.includes(ach.id);
+        const card = document.createElement('div');
+        card.style.background = isUnlocked ? "#0ea5e9" : "#0f172a";
+        card.style.border = isUnlocked ? "1px solid #38bdf8" : "1px solid #334155";
+        card.style.padding = "15px";
+        card.style.display = "flex";
+        card.style.alignItems = "center";
+        card.style.gap = "15px";
+        card.style.opacity = isUnlocked ? "1" : "0.5";
+        
+        card.innerHTML = `
+            <div style="font-size: 30px;">${isUnlocked ? ach.icon : "🔒"}</div>
+            <div>
+                <div style="font-weight: bold; color: ${isUnlocked ? '#fff' : '#94a3b8'}; margin-bottom: 5px;">${ach.title}</div>
+                <div style="font-size: 12px; color: ${isUnlocked ? '#e2e8f0' : '#64748b'};">${ach.desc}</div>
+            </div>
+        `;
+        listContainer.appendChild(card);
+    });
+}
+
+function closeAchievements() {
+    document.getElementById('achievements-modal').style.display = 'none';
+}
+}
