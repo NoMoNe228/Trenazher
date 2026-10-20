@@ -1,49 +1,48 @@
 import os
 import re
 
-# Пути к файлам (скрипт ищет их в папке game2.0 относительно своего расположения)
+# Настройки для конкретного файла (Убедитесь, что имя файла совпадает!)
+js_file = 'words_eng.js'          # Имя вашего файла в папке game2.0
+sql_file = 'db_words_eng.sql'    # Итоговый SQL файл на выходе
+table_name = 'english_words'     # Имя таблицы в базе данных
+
+# Пути к файлам
 current_dir = os.path.dirname(os.path.abspath(__file__))
-js_path = os.path.join(current_dir, 'game2.0', 'quotes.js')
-sql_path = os.path.join(current_dir, 'game2.0', 'db.sql')
+js_path = os.path.join(current_dir, 'game2.0', js_file)
+sql_path = os.path.join(current_dir, 'game2.0', sql_file)
 
 def convert_js_to_sql():
     if not os.path.exists(js_path):
         print(f"❌ Ошибка: Файл не найден по пути {js_path}")
-        print("Проверьте, лежит ли quotes.js внутри папки game2.0")
         return
 
     print(f"Reading {js_path}...")
     with open(js_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # Регулярное выражение ищет текст внутри одинарных или двойных кавычек
-    # Оно вытащит цитаты, даже если они оформлены как массив ['цитата1', "цитата2"]
-    quotes = re.findall(r'["\']([^"\']+)["\']', content)
+    # Собираем абсолютно все строки в одинарных или двойных кавычках
+    all_strings = re.findall(r'["\']([^"\']+)["\']', content)
     
-    # Фильтруем технические слова JS (например, ключевые слова или названия переменных),
-    # оставляя только длинные строки (фразы), похожие на цитаты
-    valid_quotes = [q for q in quotes if len(q.strip()) > 10 and not q.strip().startswith('use strict')]
+    # Фильтруем: убираем технические слова JS и оставляем только чистые значения слов/цитат
+    ignore_list = {'text', 'id', 'wordsDatabase', 'use strict'}
+    valid_quotes = [s.strip() for s in all_strings if s.strip() not in ignore_list]
 
     if not valid_quotes:
-        print("❌ Не удалось автоматически распознать цитаты в файле.")
-        print("Возможно, у файла сложная структура. Отправьте мне его текст, и я поправлю регулярное выражение!")
+        print("❌ Не удалось автоматически распознать элементы в файле.")
         return
 
-    print(f" Найдено цитат: {len(valid_quotes)}. Формируем db.sql...")
+    print(f" Найдено элементов: {len(valid_quotes)}. Формируем {sql_file}...")
 
     # Создаем SQL-файл
     with open(sql_path, 'w', encoding='utf-8') as f:
-        # Пишем команду создания таблицы
-        f.write("CREATE TABLE IF NOT EXISTS quotes (\n")
+        f.write(f"CREATE TABLE IF NOT EXISTS {table_name} (\n")
         f.write("    id INTEGER PRIMARY KEY AUTOINCREMENT,\n")
         f.write("    text TEXT NOT NULL\n")
         f.write(");\n\n")
         
-        # Заполняем таблицу цитатами
         for quote in valid_quotes:
-            # Экранируем одинарные кавычки внутри текста, чтобы SQL не ломался
             safe_quote = quote.replace("'", "''")
-            f.write(f"INSERT INTO quotes (text) VALUES ('{safe_quote}');\n")
+            f.write(f"INSERT INTO {table_name} (text) VALUES ('{safe_quote}');\n")
 
     print(f"✅ Успешно! Файл создан: {sql_path}")
 

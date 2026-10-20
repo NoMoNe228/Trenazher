@@ -1,0 +1,14 @@
+import os
+
+js_file = 'words_ru.js'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+js_path = os.path.join(current_dir, 'game2.0', js_file)
+
+if not os.path.exists(js_path):
+    print(f"❌ Файл не найден: {js_path}")
+else:
+    print(f"--- Содержимое начала файла {js_file} ---")
+    with open(js_path, 'r', encoding='utf-8') as f:
+        # Читаем первые 500 символов для диагностики
+        print(f.read(500))
+    print("------------------------------------------")
