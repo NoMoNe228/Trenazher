@@ -71,18 +71,59 @@ const FINGERS = [
 function renderKeyboard(lang) {
     const kb = document.getElementById("keyboard");
     kb.innerHTML = "";
-    LAYOUTS[lang].forEach((row, r) => {
+    
+    // Определяем текущий режим (предложения, слова, символы, код)
+    const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    
+    let rowsToRender = [];
+
+    if (currentMode === 'symbols') {
+        // РЕЖИМ СИМВОЛОВ: Показываем только верхний ряд с цифрами и знаками
+        // (а также добавим пару символов из других рядов, которые есть в тексте)
+        rowsToRender = [
+            ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
+            ["[", "]", ";", "'", ",", ".", "/"]
+        ];
+    } else {
+        // ОБЫЧНЫЙ РЕЖИМ (Предложения, Слова, Код)
+        // Для кода всегда используем английскую раскладку, для остальных - выбранную
+        let actualLang = lang;
+        if (currentMode === 'code') actualLang = 'en';
+        
+        rowsToRender = LAYOUTS[actualLang];
+    }
+
+    // Рисуем ряды
+    rowsToRender.forEach((row, r) => {
         const rowEl = document.createElement("div");
         rowEl.className = "kb-row";
+        
+        // Если это ряд символов, назначаем им просто цвет 1-го пальца (или любой другой)
         [...row].forEach((char, i) => {
             const keyEl = document.createElement("div");
-            keyEl.className = `key finger-${FINGERS[r][i]}`;
+            // Для символов дадим класс finger-1, для обычных - по схеме FINGERS
+            const fingerClass = (currentMode === 'symbols') ? 1 : FINGERS[r][i];
+            keyEl.className = `key finger-${fingerClass}`;
             keyEl.textContent = char.toUpperCase();
             keyEl.dataset.char = char.toLowerCase();
             rowEl.appendChild(keyEl);
         });
         kb.appendChild(rowEl);
     });
+
+    // Пробел добавляем только если это не режим символов (в символах пробела нет)
+    if (currentMode !== 'symbols') {
+        const spaceRow = document.createElement("div");
+        spaceRow.className = "kb-row";
+        const spaceKey = document.createElement("div");
+        spaceKey.className = "key finger-4";
+        spaceKey.style.width = "250px";
+        spaceKey.textContent = "ПРОБЕЛ";
+        spaceKey.dataset.char = " ";
+        spaceRow.appendChild(spaceKey);
+        kb.appendChild(spaceRow);
+    }
+}
     const spaceRow = document.createElement("div");
     spaceRow.className = "kb-row";
     const spaceKey = document.createElement("div");
