@@ -228,7 +228,14 @@ async function startGame(difficulty) {
     isGameActive = true;                     // теперь можно печатать
 
     renderText();
-    renderKeyboard('ru');
+        // Определяем язык для клавиатуры в зависимости от режима
+    let kbLang = 'ru';
+    if (document.querySelector('input[name="mode"]:checked').value === 'code') {
+        kbLang = 'en';
+    } else if (document.getElementById('submodeSelect').value === 'en') {
+        kbLang = 'en';
+    }
+    renderKeyboard(kbLang);
     inputField.value = "";
     inputField.focus();
 
