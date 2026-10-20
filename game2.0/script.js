@@ -72,58 +72,49 @@ function renderKeyboard(lang) {
     const kb = document.getElementById("keyboard");
     kb.innerHTML = "";
     
-    // Определяем текущий режим (предложения, слова, символы, код)
     const currentMode = document.querySelector('input[name="mode"]:checked').value;
     
-    let rowsToRender = [];
-
-    if (currentMode === 'symbols') {
-        // РЕЖИМ СИМВОЛОВ: Показываем только верхний ряд с цифрами и знаками
-        // (а также добавим пару символов из других рядов, которые есть в тексте)
-        rowsToRender = [
-            ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
-            ["[", "]", ";", "'", ",", ".", "/"]
-        ];
-    } else {
-        // ОБЫЧНЫЙ РЕЖИМ (Предложения, Слова, Код)
-        // Для кода всегда используем английскую раскладку, для остальных - выбранную
-        let actualLang = lang;
-        if (currentMode === 'code') actualLang = 'en';
-        
-        rowsToRender = LAYOUTS[actualLang];
+    // Если выбран режим символов, мы принудительно показываем АНГЛИЙСКУЮ раскладку
+    // (так как спецсимволы в русской раскладке набираются сложнее, и мы их не генерируем)
+    let actualLang = lang;
+    if (currentMode === 'symbols' || currentMode === 'code') {
+        actualLang = 'en';
     }
 
-    // Рисуем ряды
-    rowsToRender.forEach((row, r) => {
+    // Специальный массив для верхнего ряда с символами (как на реальной клавиатуре)
+    const SYMBOL_ROW = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
+
+    LAYOUTS[actualLang].forEach((row, r) => {
         const rowEl = document.createElement("div");
         rowEl.className = "kb-row";
         
-        // Если это ряд символов, назначаем им просто цвет 1-го пальца (или любой другой)
-        [...row].forEach((char, i) => {
+        // Если это верхний ряд (r === 0), заменяем цифры на символы для режима "Символы"
+        let currentRow = [...row];
+        if (r === 0 && currentMode === 'symbols') {
+            currentRow = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
+        }
+
+        currentRow.forEach((char, i) => {
             const keyEl = document.createElement("div");
-            // Для символов дадим класс finger-1, для обычных - по схеме FINGERS
-            const fingerClass = (currentMode === 'symbols') ? 1 : FINGERS[r][i];
-            keyEl.className = `key finger-${fingerClass}`;
-            keyEl.textContent = char.toUpperCase();
-            keyEl.dataset.char = char.toLowerCase();
+            keyEl.className = `key finger-${FINGERS[r][i]}`;
+            
+            // Если это режим символов, мы показываем надписи с Shift (например, @ вместо 2)
+            if (currentMode === 'symbols' && r === 0) {
+                const shifted = ["~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"];
+                keyEl.textContent = shifted[i];
+                keyEl.dataset.char = shifted[i]; // Для подсветки
+                keyEl.dataset.base = char;       // Базовая клавиша (для поиска)
+            } else {
+                keyEl.textContent = char.toUpperCase();
+                keyEl.dataset.char = char.toLowerCase();
+            }
+            
             rowEl.appendChild(keyEl);
         });
         kb.appendChild(rowEl);
     });
 
-    // Пробел добавляем только если это не режим символов (в символах пробела нет)
-    if (currentMode !== 'symbols') {
-        const spaceRow = document.createElement("div");
-        spaceRow.className = "kb-row";
-        const spaceKey = document.createElement("div");
-        spaceKey.className = "key finger-4";
-        spaceKey.style.width = "250px";
-        spaceKey.textContent = "ПРОБЕЛ";
-        spaceKey.dataset.char = " ";
-        spaceRow.appendChild(spaceKey);
-        kb.appendChild(spaceRow);
-    }
-}
+    // Пробел
     const spaceRow = document.createElement("div");
     spaceRow.className = "kb-row";
     const spaceKey = document.createElement("div");
