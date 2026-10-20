@@ -85,13 +85,13 @@ function renderKeyboard(lang) {
     
     const currentMode = document.querySelector('input[name="mode"]:checked').value;
     
-    // Для режимов символов и кода используем английскую раскладку
+    // В режиме кода всегда английская раскладка, в остальных - выбранная
     let actualLang = lang;
-    if (currentMode === 'symbols' || currentMode === 'code') {
+    if (currentMode === 'code') {
         actualLang = 'en';
     }
 
-    // Карта символов для Shift (верхний ряд, буквы и знаки препинания)
+    // Карта символов для Shift (чтобы нарисовать их на клавишах сверху)
     const SHIFT_MAP = {
         '`': '~', '1': '!', '2': '@', '3': '#', '4': '$', '5': '%', '6': '^', '7': '&', '8': '*', '9': '(', '0': ')', '-': '_', '=': '+',
         '[': '{', ']': '}', '\\': '|',
@@ -104,19 +104,26 @@ function renderKeyboard(lang) {
         
         [...row].forEach((char, i) => {
             const keyEl = document.createElement("div");
-            // Цвет пальца берем по схеме
             keyEl.className = `key finger-${FINGERS[r][i]}`;
             
-            // Если это режим символов, показываем символ с Shift (если он есть)
-            if (currentMode === 'symbols') {
-                const shiftedChar = SHIFT_MAP[char] || char; // Если нет в карте, оставляем как есть
-                keyEl.textContent = shiftedChar;
-                keyEl.dataset.char = shiftedChar; // Для подсветки
-                keyEl.dataset.base = char;       // Базовая клавиша
-            } else {
-                // Обычный режим - показываем буквы
-                keyEl.textContent = char.toUpperCase();
-                keyEl.dataset.char = char.toLowerCase();
+            // Если у клавиши есть символ с Shift, рисуем его сверху мелким шрифтом
+            if (SHIFT_MAP[char]) {
+                const topSpan = document.createElement("span");
+                topSpan.className = "key-top";
+                topSpan.textContent = SHIFT_MAP[char];
+                keyEl.appendChild(topSpan);
+            }
+            
+            // Основная надпись (буква или цифра)
+            const mainSpan = document.createElement("span");
+            mainSpan.className = "key-main";
+            mainSpan.textContent = char.toUpperCase();
+            keyEl.appendChild(mainSpan);
+            
+            // Сохраняем данные для подсветки
+            keyEl.dataset.char = char.toLowerCase();
+            if (SHIFT_MAP[char]) {
+                keyEl.dataset.shift = SHIFT_MAP[char];
             }
             
             rowEl.appendChild(keyEl);
