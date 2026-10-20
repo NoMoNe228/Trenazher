@@ -671,4 +671,4 @@ function openAchievements() {
 function closeAchievements() {
     document.getElementById('achievements-modal').style.display = 'none';
 }
-}
+
