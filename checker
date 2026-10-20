@@ -1,0 +1,21 @@
+import sqlite3
+
+conn = sqlite3.connect('records.db')
+c = conn.cursor()
+
+# Check if tables exist
+c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+print("Tables in database:", c.fetchall())
+
+# Check quotes count
+try:
+    c.execute("SELECT COUNT(*) FROM quotes")
+    print("Total quotes found:", c.fetchone()[0])
+    
+    # Print first 3 quotes
+    c.execute("SELECT * FROM quotes LIMIT 3")
+    print("Sample data:", c.fetchall())
+except Exception as e:
+    print("Error reading quotes:", e)
+
+conn.close()

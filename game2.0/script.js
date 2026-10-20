@@ -113,20 +113,41 @@ function updateSubmodes(mode) {
         select.innerHTML = `<option value="python">Python</option><option value="js">JavaScript</option><option value="html">HTML/CSS</option>`;
     }
 }
-
-// Запрос случайной цитаты с сервера
 async function fetchRandomQuote() {
-    // ✅ Вариант 1: quotes.js загружен — берём из локального массива.
-    // Работает при открытии index.html двойным кликом (file://).
-    if (Array.isArray(window.QUOTES) && window.QUOTES.length > 0) {
-        const randomIndex = Math.floor(Math.random() * window.QUOTES.length);
-        const picked = window.QUOTES[randomIndex];
-        console.log('📖 Цитата из quotes.js:', picked.id, '—', picked.quote);
-        return picked.quote;
+    try {
+        console.log('📡 Делаем запрос к Flask...');
+        const response = await fetch('http://localhost:5001/get_random_quote');
+        
+        console.log('🔗 Статус ответа сервера:', response.status);
+        if (!response.ok) {
+            throw new Error(`Сервер вернул статус ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('📦 Полученные данные (JSON):', data);
+        
+        // Жесткая проверка: если поле quote пришло, возвращаем его
+        if (data && typeof data.quote === 'string') {
+            console.log('✅ Строка цитаты успешно прочитана:', data.quote);
+            return data.quote; 
+        } else {
+            console.error('❌ Внутри JSON нет поля quote или оно не является строкой!', data);
+        }
+    } catch (error) {
+        // Если вывелась эта ошибка, значит fetch вообще не смог достучаться до сервера
+        console.warn('⚠️ fetchRandomQuote упал в catch:', error.message);
     }
+    
+    // Если мы дошли сюда, значит база не ответила. 
+    // Возвращаем null, чтобы getTextForLevel() включил локальный fallback
+    return null; 
 }
 
+
+
+
 async function getTextForLevel() {
+
     const mode = document.querySelector('input[name="mode"]:checked').value;
     const submode = document.getElementById('submodeSelect').value;
     const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
