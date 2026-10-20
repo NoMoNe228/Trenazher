@@ -84,33 +84,41 @@ function renderKeyboard(lang) {
     kb.innerHTML = "";
     
     const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    
+    // Для режимов символов и кода используем английскую раскладку
     let actualLang = lang;
     if (currentMode === 'symbols' || currentMode === 'code') {
         actualLang = 'en';
     }
 
+    // Карта символов для Shift (верхний ряд, буквы и знаки препинания)
+    const SHIFT_MAP = {
+        '`': '~', '1': '!', '2': '@', '3': '#', '4': '$', '5': '%', '6': '^', '7': '&', '8': '*', '9': '(', '0': ')', '-': '_', '=': '+',
+        '[': '{', ']': '}', '\\': '|',
+        ';': ':', "'": '"', ',': '<', '.': '>', '/': '?'
+    };
+
     LAYOUTS[actualLang].forEach((row, r) => {
         const rowEl = document.createElement("div");
         rowEl.className = "kb-row";
         
-        let currentRow = [...row];
-        if (r === 0 && currentMode === 'symbols') {
-            currentRow = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
-        }
-
-        currentRow.forEach((char, i) => {
+        [...row].forEach((char, i) => {
             const keyEl = document.createElement("div");
+            // Цвет пальца берем по схеме
             keyEl.className = `key finger-${FINGERS[r][i]}`;
             
-            if (currentMode === 'symbols' && r === 0) {
-                const shifted = ["~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"];
-                keyEl.textContent = shifted[i];
-                keyEl.dataset.char = shifted[i];
-                keyEl.dataset.base = char;
+            // Если это режим символов, показываем символ с Shift (если он есть)
+            if (currentMode === 'symbols') {
+                const shiftedChar = SHIFT_MAP[char] || char; // Если нет в карте, оставляем как есть
+                keyEl.textContent = shiftedChar;
+                keyEl.dataset.char = shiftedChar; // Для подсветки
+                keyEl.dataset.base = char;       // Базовая клавиша
             } else {
+                // Обычный режим - показываем буквы
                 keyEl.textContent = char.toUpperCase();
                 keyEl.dataset.char = char.toLowerCase();
             }
+            
             rowEl.appendChild(keyEl);
         });
         kb.appendChild(rowEl);
@@ -133,18 +141,18 @@ function highlightKey(char) {
     if (!char) return;
     
     const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    
+    // В режиме символов ищем по data-char (так как мы записали туда символ с Shift)
     if (currentMode === 'symbols') {
-        const shiftMap = {
-            '~': '`', '!': '1', '@': '2', '#': '3', '$': '4', '%': '5', '^': '6', 
-            '&': '7', '*': '8', '(': '9', ')': '0', '_': '-', '+': '=',
-            '{': '[', '}': ']', ':': ';', '"': "'", '<': ',', '>': '.', '?': '/', '|': '\\'
-        };
-        const baseChar = shiftMap[char] || char.toLowerCase();
-        const keyEl = document.querySelector(`.key[data-base="${baseChar}"]`);
-        if (keyEl) keyEl.classList.add('active');
+        const keyEl = document.querySelector(`.key[data-char="${char}"]`);
+        if (keyEl) {
+            keyEl.classList.add('active');
+            // Дополнительно можно было бы подсветить Shift, но пока просто клавишу
+        }
         return;
     }
     
+    // Обычный режим (буквы)
     const keyEl = document.querySelector(`.key[data-char="${char.toLowerCase()}"]`);
     if (keyEl) keyEl.classList.add('active');
 }
