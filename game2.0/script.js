@@ -350,16 +350,22 @@ function endGame(reason) {
 
     document.getElementById('game-over-reason').textContent = reason;
 
+    // --- Правильный расчёт WPM ---
+    // Считаем по фактически набранным символам, а не по длине всего текста.
+    // Формула: (правильные символы / 5) / минуты
     let wpm = 0;
-    if (startTime) {
-        const timeTakenMs = Date.now() - startTime;
-        if (timeTakenMs > 1000) {
-            const timeTakenMin = timeTakenMs / 60000;
-            const wordCount = currentText.split(" ").length;
-            wpm = (wordCount / timeTakenMin).toFixed(2);
+    let correctChars = 0;
+    if (startTime && currentText) {
+        const timeTakenMin = (Date.now() - startTime) / 60000;
+        for (let i = 0; i < input.length; i++) {
+            if (input[i] === currentText[i]) correctChars++;
+        }
+        if (timeTakenMin > 0 && correctChars > 0) {
+            wpm = (correctChars / 5 / timeTakenMin).toFixed(2);
         }
     }
     document.getElementById('wpm').textContent = wpm;
+
     document.getElementById('earned').textContent = currentScore;
 
     const userStr = localStorage.getItem('currentUser');
