@@ -1,50 +1,147 @@
 import os
-import re
 
-# Настройки для конкретного файла (Убедитесь, что имя файла совпадает!)
-js_file = 'words_eng.js'          # Имя вашего файла в папке game2.0
-sql_file = 'db_words_eng.sql'    # Итоговый SQL файл на выходе
-table_name = 'english_words'     # Имя таблицы в базе данных
-
-# Пути к файлам
+# Пути к папке game2.0 относительно расположения скрипта
 current_dir = os.path.dirname(os.path.abspath(__file__))
-js_path = os.path.join(current_dir, 'game2.0', js_file)
-sql_path = os.path.join(current_dir, 'game2.0', sql_file)
+game_dir = os.path.join(current_dir, 'game2.0')
 
-def convert_js_to_sql():
-    if not os.path.exists(js_path):
-        print(f"❌ Ошибка: Файл не найден по пути {js_path}")
-        return
+# Создаем папку, если ее вдруг нет
+os.makedirs(game_dir, exist_ok=True)
 
-    print(f"Reading {js_path}...")
-    with open(js_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+# 100 Однострочников Python
+python_blocks = [
+    """print('Hello, World!')""", """x = 5; y = 10; print(x + y)""", """if x > 0: print('Positive')""",
+    """for i in range(5): print(i)""", """greet = lambda name: f'Hello, {name}'""", """my_list = []""",
+    """my_dict = {'name': 'Alice', 'age': 25}""", """while x < 10: x += 1""", """res = [x**2 for x in range(10)]""",
+    """import math; print(math.pi)""", """print(type(42))""", """text = 'Python'.upper()""",
+    """is_valid = True; print(not is_valid)""", """print(len(text))""", """import json; data = json.loads('{"a": 1}')""",
+    """print('Yes' if x > 5 else 'No')""", """import os; print(os.getcwd())""", """from datetime import datetime; print(datetime.now())""",
+    """x = None; print(x is None)""", """print(f'Value: {x}')""", """a, b = b, a""", """matrix = [3 for _ in range(3)]""",
+    """import sys; sys.exit()""", """text = ' hello '.strip()""", """words = 'a,b,c'.split(',')""", """joined = '-'.join(['a', 'b', 'c'])""",
+    """print(any([True, False, False]))""", """print(all([True, True, False]))""", """import random; num = random.randint(1, 10)""",
+    """my_list.append(6)""", """my_list.pop(0)""", """res = sorted(my_list)""", """my_list.reverse()""", """import time; time.sleep(1)""",
+    """print(isinstance('abc', str))""", """print(abs(-5))""", """print(round(3.14159, 2))""", """print(min(5, 10, 2))""",
+    """print(max(5, 10, 2))""", """print(pow(2, 3))""", """print('apple' in ['apple', 'banana'])""", """print(bin(10))""",
+    """print(hex(255))""", """print(oct(8))""", """print(chr(97))""", """print(ord('a'))""", """import collections; d = collections.deque()""",
+    """from collections import Counter; c = Counter('abcabc')""", """import re; match = re.search(r'\\d+', 'abc123')""",
+    """import uuid; print(uuid.uuid4())""", """import hashlib; print(hashlib.sha256(b'data').hexdigest())""", """print(dir(object))""",
+    """print(callable(print))""", """print(id(x))""", """print(hash('abc'))""", """import base64; b64 = base64.b64encode(b'hello')""",
+    """import math; print(math.sqrt(16))""", """import math; print(math.ceil(4.2))""", """import math; print(math.floor(4.7))""",
+    """print(''.join(reversed('abc')))""", """filtered = list(filter(lambda x: x > 0, [-1, 0, 1]))""", """mapped = list(map(lambda x: x * 2, [1]))""",
+    """from functools import reduce; res = reduce(lambda x, y: x+y, [1])""", """print(sum([1]))""", """print(list(range(0, 10, 2)))""",
+    """import statistics; print(statistics.mean([1]))""", """import calendar; print(calendar.isleap(2024))""", """print('abc'.isalpha())""",
+    """print('123'.isdigit())""", """print('abc123'.isalnum())""", """print('abc'.islower())""", """print('ABC'.isupper())""",
+    """print(' '.isspace())""", """print('Hello World'.istitle())""", """print('abc'.startswith('a'))""", """print('abc'.endswith('c'))""",
+    """print('abc'.find('b'))""", """print('abc'.count('a'))""", """print('a'.zfill(3))""", """print('abc'.replace('a', 'z'))""",
+    """my_set = {1, 2, 3}; my_set.add(4)""", """my_set.remove(1)""", """print({1, 2} | {2, 3})""", """print({1, 2} & {2, 3})""",
+    """print({1, 2} - {2, 3})""", """print({1, 2} ^ {2, 3})""", """print(dict.fromkeys(['a', 'b'], 0))""", """print(list(enumerate(['a', 'b'])))""",
+    """print(list(zip(['a', 'b'], [1])))""", """import copy; new_list = copy.copy(python_blocks)""", """import sys; print(sys.version)""",
+    """import sys; print(sys.platform)""", """import platform; print(platform.system())""", """import time; print(time.time())""",
+    """import time; print(time.ctime())""", """open('out.txt', 'w').write('ok')""", """print(open('out.txt').read())""",
+    """import shutil; shutil.copy('a.txt', 'b.txt')""", """import glob; print(glob.glob('*.py'))""", """print('Done!')"""
+]
 
-    # Собираем абсолютно все строки в одинарных или двойных кавычках
-    all_strings = re.findall(r'["\']([^"\']+)["\']', content)
+# 100 Однострочников Java
+java_blocks = [
+    """System.out.println("Hello, World!");""", """int x = 5; int y = 10; System.out.println(x + y);""",
+    """if (x > 0) { System.out.println("Positive"); }""", """for (int i = 0; i < 5; i++) { System.out.println(i); }""",
+    """int[] arr = {1, 2, 3, 4, 5};""", """ArrayList<String> list = new ArrayList<>();""",
+    """HashMap<String, Integer> map = new HashMap<>();""", """while (x < 10) { x++; }""",
+    """String text = "Java"; System.out.println(text.length());""", """double pi = Math.PI;""",
+    """boolean flag = true; if (!flag) {}""", """HashSet<Integer> set = new HashSet<>();""",
+    """String s = text.toUpperCase();""", """int val = Integer.parseInt("123");""",
+    """String valStr = String.valueOf(42);""", """for (int num : arr) { System.out.println(num); }""",
+    """StringBuilder sb = new StringBuilder(); sb.append("a");""", """list.add("apple");""",
+    """map.put("key", 100);""", """int size = list.size();""", """boolean hasKey = map.containsKey("key");""",
+    """System.out.print("Same line");""", """double res = Math.pow(2, 3);""", """double root = Math.sqrt(16);""",
+    """int rand = (int)(Math.random() * 10);""", """String sub = text.substring(0, 2);""", """boolean eq = s1.equals(s2);""",
+    """boolean eqIgn = s1.equalsIgnoreCase(s2);""", """char c = text.charAt(0);""", """int idx = text.indexOf("a");""",
+    """String trimmed = text.trim();""", """String rep = text.replace("a", "b");""", """String[] tokens = text.split(",");""",
+    """list.clear();""", """boolean empty = list.isEmpty();""", """Collections.sort(list);""", """Arrays.sort(arr);""", """System.exit(0);""",
+    """Optional<String> opt = Optional.empty();""", """list.stream().filter(s -> !s.isEmpty()).count();""",
+    """File file = new File("test.txt");""", """Objects.requireNonNull(obj, "Null");""", """LocalDate date = LocalDate.now();""",
+    """LocalTime time = LocalTime.now();""", """LocalDateTime dt = LocalDateTime.now();""", """UUID uuid = UUID.randomUUID();""",
+    """long ts = System.currentTimeMillis();""", """long nano = System.nanoTime();""", """int code = obj.hashCode();""",
+    """boolean instance = obj instanceof String;""", """Class<?> clazz = obj.getClass();""",
+    """byte[] bytes = "data".getBytes(StandardCharsets.UTF_8);""", """Path path = Paths.get("a.txt");""",
+    """Iterator<String> it = list.iterator();""", """int res = Integer.compare(x, y);""", """int max = Math.max(x, y);""",
+    """int min = Math.min(x, y);""", """int abs = Math.abs(-10);""", """double ceil = Math.ceil(4.2);""", """double floor = Math.floor(4.7);""",
+    """long round = Math.round(4.5);""", """BigInteger bi = new BigInteger("123456789");""", """BigDecimal bd = new BigDecimal("10.55");""",
+    """String lower = text.toLowerCase();""", """boolean cont = text.contains("abc");""", """boolean emptyStr = text.isEmpty();""",
+    """boolean blankStr = text.isBlank();""", """String joined = String.join("-", "a", "b");""", """int len = arr.length;""",
+    """int valOrDef = map.getOrDefault("key", 0);""", """map.remove("key");""", """boolean hasVal = map.containsValue(100);""",
+    """LinkedList<String> ll = new LinkedList<>();""", """Queue<String> q = new LinkedList<>();""", """Stack<String> st = new Stack<>();""",
+    """st.push("a"); String top = st.pop();""", """q.add("a"); String head = q.poll();""", """list.remove("apple");""",
+    """list.set(0, "banana");""", """String first = list.get(0);""", """int[][] matrix = new int[2][2];""",
+    """String formatted = String.format("Val: %d", x);""", """System.err.println("Error message");""",
+    """boolean match = text.matches("\\\\d+");""", """char[] chars = text.toCharArray();""", """boolean starts = text.startsWith("a");""",
+    """boolean ends = text.endsWith("z");""", """int compare = s1.compareTo(s2);""", """System.out.printf("Count: %d\\n", x);""",
+    """double randDoc = ThreadLocalRandom.current().nextDouble();""", """int sign = Long.signum(x);""",
+    """boolean b = Boolean.parseBoolean("true");""", """double d = Double.parseDouble("3.14");""",
+    """long l = Long.parseLong("123456789");""", """List<String> unmod = List.of("a", "b");""", """Set<Integer> unmodSet = Set.of(1, 2);""",
+    """Map<String, String> unmodMap = Map.of("k", "v");""", """Instant now = Instant.now();""", """Runtime.getRuntime().gc();""",
+    """System.out.println("Done!");"""
+]
+
+# 100 Однострочников HTML
+html_blocks = [
+    """<!DOCTYPE html>""", """<html></html>""", """<head><title>Page Title</title></head>""", """<body><h1>Hello World</h1></body>""",
+    """<p>This is a paragraph.</p>""", """<a href="https://google.com">Link</a>""", """<img src="img.jpg" alt="Image">""",
+    """<br>""", """<hr>""", """<strong>Bold Text</strong>""", """<em>Italic Text</em>""", """<div class="container"></div>""",
+    """<span id="highlight">text</span>""", """<ul><li>Item</li></ul>""", """<ol><li>First</li></ol>""", """<!-- This is a comment -->""",
+    """<form action="/submit" method="POST"></form>""", """<input type="text" name="user" placeholder="Login">""",
+    """<input type="password" name="pass">""", """<input type="submit" value="Send">""", """<button type="button">Click Me</button>""",
+    """<textarea rows="4" cols="50"></textarea>""", """<select name="cars"><option value="volvo">Volvo</option></select>""",
+    """<label for="male">Male</label>""", """<input type="radio" id="male" name="gender" value="male">""",
+    """<input type="checkbox" id="bike" value="Bike">""", """<table><tr><th>Header</th></tr></table>""", """<tr><td>Data</td></tr>""",
+    """<meta charset="UTF-8">""", """<meta name="viewport" content="width=device-width, initial-scale=1.0">""",
+    """<link rel="stylesheet" href="style.css">""", """<script src="script.js"></script>""", """<style>body { background-color: #fff; }</style>""",
+"""console.log('hi');""", """""", """""", """""", """""",
+"""""", """""", """""", """Heading 2""", """Heading 3""", """Heading 4""",
+"""Heading 5""", """Heading 6""", """Quote""", """Formatted text""",
+"""code block""", """""",
+"""""", """""",
+"""""", """""",
+"""""", """""", """""", """""",
+"""""", """""", """""",
+"""Title""", """""",
+"""""", """2/10""",
+"""OpenContent""", """Open window""", """""",
+"""Cap""", """Valentine's Day""",
+"""Highlighted text""", """Deleted text""", """Inserted text""", """Subscript""",
+"""Superscript""", """Smaller text""", """HTML""", """Right-to-left text""",
+"""Definition""", """Ctrl + C""", """Sample output from program""", """x = y + 2""",
+"""Call Us""", """Email Us""", """""",
+"""""", """""",
+"""Your browser does not support JavaScript!""", """""",
+"""""", """""",
+"""""", """""", """""",
+"""Hover over me""", """This paragraph is hidden""", """Editable text""",
+"""Draggable paragraph""", """""", """"""
+]
+def generate_sql(filename, table_name, data_list):
+    # Внутри функции: 1 уровень отступа (4 пробела)
+    sql_path = os.path.join(game_dir, filename)
     
-    # Фильтруем: убираем технические слова JS и оставляем только чистые значения слов/цитат
-    ignore_list = {'text', 'id', 'wordsDatabase', 'use strict'}
-    valid_quotes = [s.strip() for s in all_strings if s.strip() not in ignore_list]
-
-    if not valid_quotes:
-        print("❌ Не удалось автоматически распознать элементы в файле.")
-        return
-
-    print(f" Найдено элементов: {len(valid_quotes)}. Формируем {sql_file}...")
-
-    # Создаем SQL-файл
     with open(sql_path, 'w', encoding='utf-8') as f:
+        # Внутри контекстного менеджера with: 2 уровень (8 пробелов)
         f.write(f"CREATE TABLE IF NOT EXISTS {table_name} (\n")
         f.write("    id INTEGER PRIMARY KEY AUTOINCREMENT,\n")
         f.write("    text TEXT NOT NULL\n")
         f.write(");\n\n")
         
-        for quote in valid_quotes:
-            safe_quote = quote.replace("'", "''")
-            f.write(f"INSERT INTO {table_name} (text) VALUES ('{safe_quote}');\n")
+        for code in data_list:
+            # Внутри цикла for: 3 уровень (12 пробелов)
+            safe_code = code.replace("'", "''")
+            f.write(f"INSERT INTO {table_name} (text) VALUES ('{safe_code}');\n")
+            
+    # Возвращаемся на 1 уровень (4 пробела)
+    print(f"✅ Создан дамп: {filename} ({len(data_list)} элементов) -> Таблица: {table_name}")
 
-    print(f"✅ Успешно! Файл создан: {sql_path}")
 
 if __name__ == '__main__':
-    convert_js_to_sql()
+    # Главная точка входа: внутри условия if (4 пробела)
+    print("🚀 Старт генерации баз данных кода...")
+    generate_sql('db_code_python.sql', 'python_code', python_blocks)
+    generate_sql('db_code_java.sql', 'java_code', java_blocks)
+    generate_sql('db_code_html.sql', 'html_code', html_blocks)
+    print("🎉 Все три файла успешно созданы в папке game2.0!")
