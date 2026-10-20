@@ -11,6 +11,16 @@ const library = {
         "Practice makes perfect and speed comes with time",
         "Keep your eyes on the screen not on the keys"
     ],
+    words_ru: [
+        "дом", "мир", "рука", "окно", "книга", "лампа", "солнце", "клавиша", 
+        "скорость", "точность", "печать", "герой", "палец", "строка", "уровень", 
+        "победа", "ракета", "дорога", "ветер", "звезда", "огонь", "время", "кот", "лес"
+    ],
+    words_en: [
+        "home", "world", "hand", "book", "light", "sun", "keyboard", "speed", 
+        "focus", "typing", "hero", "finger", "level", "rocket", "road", "star", 
+        "fire", "time", "water", "green", "quick", "brown", "fox", "jumps", "lazy"
+    ],
     code_python: [
         "def hello_world():\n    print('Hello, world!')",
         "for i in range(5):\n    print(i)",
@@ -36,7 +46,8 @@ let startTime = null;
 let isGameActive = false;
 let currentCombo = 0;
 let currentDifficulty = 'easy';
-let currentScore = 0; // Очки за текущую игру
+let currentScore = 0; 
+let currentSessionErrors = {}; // Сбор ошибок за текущую игру
 
 const textContainer = document.getElementById('text-to-type');
 const inputField = document.getElementById('hidden-input');
@@ -73,22 +84,15 @@ function renderKeyboard(lang) {
     kb.innerHTML = "";
     
     const currentMode = document.querySelector('input[name="mode"]:checked').value;
-    
-    // Если выбран режим символов, мы принудительно показываем АНГЛИЙСКУЮ раскладку
-    // (так как спецсимволы в русской раскладке набираются сложнее, и мы их не генерируем)
     let actualLang = lang;
     if (currentMode === 'symbols' || currentMode === 'code') {
         actualLang = 'en';
     }
 
-    // Специальный массив для верхнего ряда с символами (как на реальной клавиатуре)
-    const SYMBOL_ROW = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
-
     LAYOUTS[actualLang].forEach((row, r) => {
         const rowEl = document.createElement("div");
         rowEl.className = "kb-row";
         
-        // Если это верхний ряд (r === 0), заменяем цифры на символы для режима "Символы"
         let currentRow = [...row];
         if (r === 0 && currentMode === 'symbols') {
             currentRow = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
@@ -98,17 +102,15 @@ function renderKeyboard(lang) {
             const keyEl = document.createElement("div");
             keyEl.className = `key finger-${FINGERS[r][i]}`;
             
-            // Если это режим символов, мы показываем надписи с Shift (например, @ вместо 2)
             if (currentMode === 'symbols' && r === 0) {
                 const shifted = ["~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"];
                 keyEl.textContent = shifted[i];
-                keyEl.dataset.char = shifted[i]; // Для подсветки
-                keyEl.dataset.base = char;       // Базовая клавиша (для поиска)
+                keyEl.dataset.char = shifted[i];
+                keyEl.dataset.base = char;
             } else {
                 keyEl.textContent = char.toUpperCase();
                 keyEl.dataset.char = char.toLowerCase();
             }
-            
             rowEl.appendChild(keyEl);
         });
         kb.appendChild(rowEl);
@@ -129,6 +131,20 @@ function renderKeyboard(lang) {
 function highlightKey(char) {
     document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
     if (!char) return;
+    
+    const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    if (currentMode === 'symbols') {
+        const shiftMap = {
+            '~': '`', '!': '1', '@': '2', '#': '3', '$': '4', '%': '5', '^': '6', 
+            '&': '7', '*': '8', '(': '9', ')': '0', '_': '-', '+': '=',
+            '{': '[', '}': ']', ':': ';', '"': "'", '<': ',', '>': '.', '?': '/', '|': '\\'
+        };
+        const baseChar = shiftMap[char] || char.toLowerCase();
+        const keyEl = document.querySelector(`.key[data-base="${baseChar}"]`);
+        if (keyEl) keyEl.classList.add('active');
+        return;
+    }
+    
     const keyEl = document.querySelector(`.key[data-char="${char.toLowerCase()}"]`);
     if (keyEl) keyEl.classList.add('active');
 }
@@ -137,7 +153,7 @@ function highlightKey(char) {
 function updateSubmodes(mode) {
     const select = document.getElementById('submodeSelect');
     select.innerHTML = "";
-    if (mode === 'sentences') {
+    if (mode === 'sentences' || mode === 'words') {
         select.innerHTML = `<option value="ru">Русский язык</option><option value="en">English language</option>`;
     } else if (mode === 'symbols') {
         select.innerHTML = `<option value="all">Все символы</option>`;
@@ -145,41 +161,20 @@ function updateSubmodes(mode) {
         select.innerHTML = `<option value="python">Python</option><option value="js">JavaScript</option><option value="html">HTML/CSS</option>`;
     }
 }
+
 async function fetchRandomQuote() {
     try {
-        console.log('📡 Делаем запрос к Flask...');
         const response = await fetch('http://localhost:5001/get_random_quote');
-        
-        console.log('🔗 Статус ответа сервера:', response.status);
-        if (!response.ok) {
-            throw new Error(`Сервер вернул статус ${response.status}`);
-        }
-        
+        if (!response.ok) throw new Error(`Сервер вернул статус ${response.status}`);
         const data = await response.json();
-        console.log('📦 Полученные данные (JSON):', data);
-        
-        // Жесткая проверка: если поле quote пришло, возвращаем его
-        if (data && typeof data.quote === 'string') {
-            console.log('✅ Строка цитаты успешно прочитана:', data.quote);
-            return data.quote; 
-        } else {
-            console.error('❌ Внутри JSON нет поля quote или оно не является строкой!', data);
-        }
+        if (data && typeof data.quote === 'string') return data.quote; 
     } catch (error) {
-        // Если вывелась эта ошибка, значит fetch вообще не смог достучаться до сервера
-        console.warn('⚠️ fetchRandomQuote упал в catch:', error.message);
+        console.warn('⚠️ Не удалось получить цитату с сервера:', error.message);
     }
-    
-    // Если мы дошли сюда, значит база не ответила. 
-    // Возвращаем null, чтобы getTextForLevel() включил локальный fallback
     return null; 
 }
 
-
-
-
 async function getTextForLevel() {
-
     const mode = document.querySelector('input[name="mode"]:checked').value;
     const submode = document.getElementById('submodeSelect').value;
     const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -193,11 +188,16 @@ async function getTextForLevel() {
         if (submode === 'python') return getRandom(library.code_python);
         if (submode === 'js')     return getRandom(library.code_js);
         if (submode === 'html')   return getRandom(library.code_html);
+    } else if (mode === 'words') {
+        let wordList = (submode === 'ru') ? library.words_ru : library.words_en;
+        let result = [];
+        for (let i = 0; i < 10; i++) result.push(getRandom(wordList));
+        return result.join(" ");
     } else {
         if (submode === 'ru') {
-            const quote = await fetchRandomQuote();       // ← из БД
+            const quote = await fetchRandomQuote();
             if (quote) return quote;
-            return getRandom(library.sentences_ru);       // ← fallback
+            return getRandom(library.sentences_ru);
         }
         if (submode === 'en') return getRandom(library.sentences_en);
     }
@@ -214,17 +214,17 @@ async function startGame(difficulty) {
 
     input = "";
     mistakes = 0;
-    isGameActive = false;    // заблокируем ввод, пока грузится цитата
+    isGameActive = false; 
     startTime = null;
     currentCombo = 0;
+    currentScore = 0;
+    currentSessionErrors = {}; // Очищаем ошибки для новой игры
 
     document.getElementById('combo').textContent = 0;
     document.getElementById('multiplier').textContent = "1";
     document.getElementById('game-over').style.display = 'none';
     document.getElementById('mistakes').textContent = 0;
-        currentScore = 0;
-    document.getElementById('points').textContent = currentScore;
-
+    document.getElementById('points').textContent = 0;
 
     const timerBox = document.getElementById('timerBox');
     if (difficulty === 'easy' || difficulty === 'medium') {
@@ -236,11 +236,10 @@ async function startGame(difficulty) {
         document.getElementById('timer').textContent = timer;
     }
 
-    currentText = await getTextForLevel();   // ← ждём цитату с сервера
-    isGameActive = true;                     // теперь можно печатать
+    currentText = await getTextForLevel(); 
+    isGameActive = true;                     
 
     renderText();
-        // Определяем язык для клавиатуры в зависимости от режима
     let kbLang = 'ru';
     if (document.querySelector('input[name="mode"]:checked').value === 'code') {
         kbLang = 'en';
@@ -248,6 +247,7 @@ async function startGame(difficulty) {
         kbLang = 'en';
     }
     renderKeyboard(kbLang);
+    
     inputField.value = "";
     inputField.focus();
 
@@ -293,7 +293,7 @@ inputField.addEventListener('input', (e) => {
         const lastTyped = input[input.length - 1];
         const expected = currentText[input.length - 1];
 
-                if (lastTyped !== expected) {
+        if (lastTyped !== expected) {
             // ОШИБКА
             playErrorSound();
             textContainer.classList.add('shake');
@@ -302,7 +302,9 @@ inputField.addEventListener('input', (e) => {
             mistakes++;
             document.getElementById('mistakes').textContent = mistakes;
 
-            // Если уровень сложный или нормальный - вылетаем
+            // Сбор статистики по буквам
+            currentSessionErrors[expected] = (currentSessionErrors[expected] || 0) + 1;
+
             if (currentDifficulty === 'medium' || currentDifficulty === 'hard') {
                 endGame("Ошибка! Игра окончена.");
                 return;
@@ -310,14 +312,12 @@ inputField.addEventListener('input', (e) => {
         } else {
             // ПРАВИЛЬНО
             currentCombo++;
-
-            // --- НОВОЕ: Начисление очков за правильную букву ---
             let mult = 1;
             if (currentCombo >= 50) mult = 5;
             else if (currentCombo >= 25) mult = 3;
             else if (currentCombo >= 10) mult = 2;
 
-            currentScore += (1 * mult); // 1 очко умножаем на комбо
+            currentScore += (1 * mult);
             document.getElementById('points').textContent = currentScore;
         }
 
@@ -360,11 +360,8 @@ function endGame(reason) {
         }
     }
     document.getElementById('wpm').textContent = wpm;
-
-    // Показываем заработанные за эту игру очки
     document.getElementById('earned').textContent = currentScore;
 
-    // Загружаем общий счет игрока
     const userStr = localStorage.getItem('currentUser');
     let total = 0;
     if (userStr) {
@@ -412,7 +409,7 @@ function loginUser() {
     const name = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
     if (!name || !pass) { alert("Заполни все поля!"); return; }
-    const userData = { name: name, bestScore: 0, runs: 0 };
+    const userData = { name: name, bestScore: 0, runs: 0, totalScore: 0, totalTime: 0, hardLetters: {} };
     localStorage.setItem('currentUser', JSON.stringify(userData));
     alert(`Успешный вход! Привет, ${name}!`);
     checkLogin();
@@ -427,22 +424,32 @@ function saveResult() {
     if (userStr) {
         let userData = JSON.parse(userStr);
 
-        // Прибавляем очки за эту игру к общему счету
         userData.totalScore = (userData.totalScore || 0) + currentScore;
         userData.runs = (userData.runs || 0) + 1;
 
-        // Обновляем лучший результат за одну игру
         if (currentScore > (userData.bestScore || 0)) {
             userData.bestScore = currentScore;
         }
 
+        const timeTaken = startTime ? (Date.now() - startTime) / 1000 : 0;
+        userData.totalTime = (userData.totalTime || 0) + timeTaken;
+
+        userData.lastWpm = document.getElementById('wpm').textContent;
+        const totalTyped = input.length;
+        const accuracy = totalTyped > 0 ? Math.round(((totalTyped - mistakes) / totalTyped) * 100) : 100;
+        userData.lastAccuracy = accuracy;
+
+        if (!userData.hardLetters) userData.hardLetters = {};
+        for (let char in currentSessionErrors) {
+            userData.hardLetters[char] = (userData.hardLetters[char] || 0) + currentSessionErrors[char];
+        }
+
         localStorage.setItem('currentUser', JSON.stringify(userData));
-        alert(`Результат сохранен! Всего очков в профиле: ${userData.totalScore}`);
+        alert(`Результат сохранен! Всего очков: ${userData.totalScore}`);
     } else {
-        alert(`Твой результат: ${currentScore} очков. Зарегистрируйся в профиле, чтобы копить очки!`);
+        alert(`Твой результат: ${currentScore} очков. Войди в профиль, чтобы копить статистику!`);
     }
 
-    // Обновляем окно профиля, если оно открыто
     checkLogin();
     restartGame();
 }
@@ -453,10 +460,10 @@ function toggleTheme() {
     body.classList.toggle('light-theme');
     const btn = document.getElementById('themeBtn');
     if (body.classList.contains('light-theme')) {
-        btn.textContent = "☀️ Сменить тему";
+        btn.textContent = "Сменить тему";
         localStorage.setItem('theme', 'light');
     } else {
-        btn.textContent = "🌙 Сменить тему";
+        btn.textContent = "Сменить тему";
         localStorage.setItem('theme', 'dark');
     }
 }
@@ -465,42 +472,30 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light' || !savedTheme) {
         document.body.classList.add('light-theme');
-        document.getElementById('themeBtn').textContent = "☀️ Сменить тему";
+        document.getElementById('themeBtn').textContent = "Сменить тему";
         localStorage.setItem('theme', 'light');
     } else {
         document.body.classList.remove('light-theme');
-        document.getElementById('themeBtn').textContent = "🌙 Сменить тему";
+        document.getElementById('themeBtn').textContent = "Сменить тему";
     }
 });
-// Играть еще раз (возвращает к выбору сложности)
 
-
-// Заглушка для статистики (сделаем позже)
-function openStats() {
-    alert("Статистика появится в следующем обновлении! (Тут будет твой график)");
-}
-// Открыть окно рестарта
+// --- РЕСТАРТ ---
 function playAgain() {
     document.getElementById('restart-modal').style.display = 'flex';
-
-    // Синхронизируем выпадающие списки с тем, что было выбрано в главном меню
     const mainMode = document.querySelector('input[name="mode"]:checked').value;
     document.getElementById('restartMode').value = mainMode;
-
-    // Обновляем подрежимы при открытии
     updateRestartSubmodes(mainMode);
 }
 
-// Закрыть окно рестарта
 function closeRestart() {
     document.getElementById('restart-modal').style.display = 'none';
 }
 
-// Обновление подрежимов в окне рестарта
 function updateRestartSubmodes(mode) {
     const select = document.getElementById('restartSubmode');
     select.innerHTML = "";
-    if (mode === 'sentences') {
+    if (mode === 'sentences' || mode === 'words') {
         select.innerHTML = `<option value="ru">Русский язык</option><option value="en">English language</option>`;
     } else if (mode === 'symbols') {
         select.innerHTML = `<option value="all">Все символы</option>`;
@@ -509,26 +504,53 @@ function updateRestartSubmodes(mode) {
     }
 }
 
-// Обработчик смены режима в окне рестарта
 document.getElementById('restartMode').addEventListener('change', (e) => {
     updateRestartSubmodes(e.target.value);
 });
 
-// Быстрый старт с выбранными настройками
 function quickStart(difficulty) {
     closeRestart();
-
-    // Обновляем радио-кнопки и главный селект, чтобы game знал, что мы выбрали
     const mode = document.getElementById('restartMode').value;
     document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
-
-    // Вызываем updateSubmodes для главного меню (чтобы там тоже обновилось)
     updateSubmodes(mode);
-
-    // Устанавливаем подрежим в главном меню (чтобы getTextForLevel взял нужный)
     const submode = document.getElementById('restartSubmode').value;
     document.getElementById('submodeSelect').value = submode;
-
-    // Запускаем игру
     startGame(difficulty);
+}
+
+// --- СТАТИСТИКА ---
+function openStats() {
+    document.getElementById('stats-modal').style.display = 'flex';
+    
+    const userStr = localStorage.getItem('currentUser');
+    if (!userStr) {
+        document.getElementById('stats-auth-warning').style.display = 'block';
+        document.getElementById('stats-content').style.display = 'none';
+        return;
+    }
+    
+    document.getElementById('stats-auth-warning').style.display = 'none';
+    document.getElementById('stats-content').style.display = 'block';
+    
+    const user = JSON.parse(userStr);
+    
+    document.getElementById('stat-total-runs').textContent = user.runs || 0;
+    document.getElementById('stat-total-time').textContent = Math.round((user.totalTime || 0) / 60);
+    document.getElementById('stat-total-score').textContent = user.totalScore || 0;
+    
+    document.getElementById('stat-last-wpm').textContent = user.lastWpm || 0;
+    document.getElementById('stat-last-accuracy').textContent = (user.lastAccuracy || 0) + "%";
+    
+    const hardLetters = user.hardLetters || {};
+    const sorted = Object.entries(hardLetters).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    
+    if (sorted.length > 0) {
+        document.getElementById('stat-hard-letters').textContent = sorted.map(([char, count]) => `"${char}" (${count})`).join(", ");
+    } else {
+        document.getElementById('stat-hard-letters').textContent = "Ошибок пока нет!";
+    }
+}
+
+function closeStats() {
+    document.getElementById('stats-modal').style.display = 'none';
 }
