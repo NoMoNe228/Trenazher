@@ -1,8 +1,18 @@
+'''import sys
+import subprocess
+subprocess.check_call([sys.executable, "-m", "pip", "install", "flask"])'''
+
+
 from flask import Flask, request, jsonify, render_template
 import sqlite3
 import os
 
-app = Flask(__name__, template_folder='.', static_folder='.')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, 
+            template_folder=current_dir, 
+            static_folder=current_dir, 
+            static_url_path='')
+
 
 
 # --- CORS ---
