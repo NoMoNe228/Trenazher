@@ -50,23 +50,6 @@ init_db()
 def index():
     return render_template('index.html')
 
-# --- API ЦИТАТ ---
-@app.route('/get_random_quote', methods=['GET'])
-def get_random_quote():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    try:
-        c.execute('SELECT text FROM quotes ORDER BY RANDOM() LIMIT 1')
-        row = c.fetchone()
-    except sqlite3.OperationalError:
-        row = None
-    finally:
-        conn.close()
-
-    if row:
-        return jsonify({"quote": row[0]})
-    return jsonify({"error": "No quotes found"}), 404
-
 # --- API СЛОВ ---
 @app.route('/get_random_words', methods=['GET'])
 def get_random_words():
