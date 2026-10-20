@@ -189,6 +189,7 @@
     <header id="main-header">
         <button onclick="toggleTheme()" id="themeBtn" style="background: #475569; color: #fff;">Сменить тему</button>
         <button onclick="openProfile()" style="background: #0ea5e9; color: #fff;">Личный кабинет</button>
+                <button onclick="openStats()" style="background: #0ea5e9; color: #fff;">Статистика</button>
     </header>
 
     <!-- 2. ГЛАВНОЕ МЕНЮ -->
@@ -342,6 +343,47 @@
             </div>
 
             <button onclick="closeRestart()" style="background: transparent; color: #94a3b8; border: none; cursor: pointer;">Отмена</button>
+        </div>
+    </div>
+        <!-- МОДАЛЬНОЕ ОКНО СТАТИСТИКИ -->
+    <div id="stats-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 120; align-items: center; justify-content: center;">
+        <div style="background: #1e293b; padding: 30px; border-radius: 8px; width: 500px; text-align: left; border: 1px solid #334155; color: #fff;">
+            <h2 style="color: #38bdf8; margin-top: 0; text-align: center;">Твоя статистика</h2>
+            
+            <div id="stats-auth-warning" style="display: none; text-align: center; color: #f87171; margin-bottom: 20px;">
+                Войди в профиль, чтобы сохранять статистику!
+            </div>
+
+            <div id="stats-content">
+                <!-- Общая статистика -->
+                <h3 style="color: #818cf8; border-bottom: 1px solid #334155; padding-bottom: 5px;">Общая статистика</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Всего тренировок:</span> <b id="stat-total-runs">0</b>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Общее время (мин):</span> <b id="stat-total-time">0</b>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <span>Общий прогресс:</span> <b id="stat-total-score">0</b> очков
+                </div>
+
+                <!-- Текущая сессия (последняя игра) -->
+                <h3 style="color: #c084fc; border-bottom: 1px solid #334155; padding-bottom: 5px;">Последняя сессия</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Скорость (WPM):</span> <b id="stat-last-wpm">0</b>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <span>Точность:</span> <b id="stat-last-accuracy">0%</b>
+                </div>
+
+                <!-- Детальный разбор (трудные буквы) -->
+                <h3 style="color: #f87171; border-bottom: 1px solid #334155; padding-bottom: 5px;">Трудные буквы (топ-5)</h3>
+                <div id="stat-hard-letters" style="font-size: 18px; font-family: monospace; margin-bottom: 20px;">
+                    Нет данных
+                </div>
+            </div>
+
+            <button onclick="closeStats()" style="background: #475569; color: #fff; width: 100%; padding: 10px; margin-top: 20px;">Закрыть</button>
         </div>
     </div>
     <script src="script.js"></script>
