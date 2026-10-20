@@ -36,6 +36,7 @@ let startTime = null;
 let isGameActive = false;
 let currentCombo = 0;
 let currentDifficulty = 'easy';
+let currentScore = 0; // Очки за текущую игру
 
 const textContainer = document.getElementById('text-to-type');
 const inputField = document.getElementById('hidden-input');
@@ -168,6 +169,8 @@ async function startGame(difficulty) {
     document.getElementById('multiplier').textContent = "1";
     document.getElementById('game-over').style.display = 'none';
     document.getElementById('mistakes').textContent = 0;
+        currentScore = 0;
+    document.getElementById('points').textContent = currentScore;
     document.getElementById('points').textContent = 0;
 
     const timerBox = document.getElementById('timerBox');
@@ -230,7 +233,8 @@ inputField.addEventListener('input', (e) => {
         const lastTyped = input[input.length - 1];
         const expected = currentText[input.length - 1];
 
-        if (lastTyped !== expected) {
+                if (lastTyped !== expected) {
+            // ОШИБКА
             playErrorSound();
             textContainer.classList.add('shake');
             setTimeout(() => textContainer.classList.remove('shake'), 250);
@@ -238,12 +242,23 @@ inputField.addEventListener('input', (e) => {
             mistakes++;
             document.getElementById('mistakes').textContent = mistakes;
 
+            // Если уровень сложный или нормальный - вылетаем
             if (currentDifficulty === 'medium' || currentDifficulty === 'hard') {
                 endGame("Ошибка! Игра окончена.");
                 return;
             }
         } else {
+            // ПРАВИЛЬНО
             currentCombo++;
+
+            // --- НОВОЕ: Начисление очков за правильную букву ---
+            let mult = 1;
+            if (currentCombo >= 50) mult = 5;
+            else if (currentCombo >= 25) mult = 3;
+            else if (currentCombo >= 10) mult = 2;
+
+            currentScore += (1 * mult); // 1 очко умножаем на комбо
+            document.getElementById('points').textContent = currentScore;
         }
 
         let multiplier = 1;
@@ -277,25 +292,26 @@ function endGame(reason) {
 
     let wpm = 0;
     if (startTime) {
-        const timeTaken = (Date.now() - startTime) / 60000;
-        const wordCount = currentText.split(" ").length;
-        wpm = (timeTaken > 0) ? (wordCount / timeTaken).toFixed(2) : 0;
+        const timeTakenMs = Date.now() - startTime;
+        if (timeTakenMs > 1000) {
+            const timeTakenMin = timeTakenMs / 60000;
+            const wordCount = currentText.split(" ").length;
+            wpm = (wordCount / timeTakenMin).toFixed(2);
+        }
     }
     document.getElementById('wpm').textContent = wpm;
 
-    let earned = 0;
-    const textLength = currentText.replace(/\s/g, "").length;
-    if (mistakes < textLength) {
-        if (mistakes === 0) earned = 100;
-        else if (mistakes <= 5) earned = 80;
-        else if (mistakes <= 10) earned = 60;
-        else if (mistakes <= 15) earned = 40;
-        else earned = 20;
-    }
-    earned += Math.floor(currentCombo / 10) * 10;
+    // Показываем заработанные за эту игру очки
+    document.getElementById('earned').textContent = currentScore;
 
-    document.getElementById('earned').textContent = earned;
-    document.getElementById('points').textContent = earned;
+    // Загружаем общий счет игрока
+    const userStr = localStorage.getItem('currentUser');
+    let total = 0;
+    if (userStr) {
+        let userData = JSON.parse(userStr);
+        total = userData.totalScore || 0;
+    }
+    document.getElementById('total-points').textContent = total;
 
     document.getElementById('game-over').style.display = 'block';
     document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
@@ -325,6 +341,7 @@ function checkLogin() {
         document.getElementById('user-profile').style.display = 'block';
         document.getElementById('profile-name').textContent = userData.name;
         document.getElementById('profile-best').textContent = userData.bestScore || 0;
+        document.getElementById('profile-total').textContent = userData.totalScore || 0;
         document.getElementById('profile-runs').textContent = userData.runs || 0;
     } else {
         document.getElementById('auth-form').style.display = 'block';
@@ -345,17 +362,28 @@ function logoutUser() {
     checkLogin();
 }
 function saveResult() {
-    const points = parseInt(document.getElementById('earned').textContent);
     const userStr = localStorage.getItem('currentUser');
+
     if (userStr) {
         let userData = JSON.parse(userStr);
+
+        // Прибавляем очки за эту игру к общему счету
+        userData.totalScore = (userData.totalScore || 0) + currentScore;
         userData.runs = (userData.runs || 0) + 1;
-        if (points > (userData.bestScore || 0)) userData.bestScore = points;
+
+        // Обновляем лучший результат за одну игру
+        if (currentScore > (userData.bestScore || 0)) {
+            userData.bestScore = currentScore;
+        }
+
         localStorage.setItem('currentUser', JSON.stringify(userData));
-        alert(`Результат сохранен! Лучший результат: ${userData.bestScore}`);
+        alert(`Результат сохранен! Всего очков в профиле: ${userData.totalScore}`);
     } else {
-        alert(`Твой результат: ${points} очков. Зарегистрируйся в профиле!`);
+        alert(`Твой результат: ${currentScore} очков. Зарегистрируйся в профиле, чтобы копить очки!`);
     }
+
+    // Обновляем окно профиля, если оно открыто
+    checkLogin();
     restartGame();
 }
 
@@ -384,3 +412,63 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('themeBtn').textContent = "🌙 Сменить тему";
     }
 });
+// Играть еще раз (возвращает к выбору сложности)
+
+
+// Заглушка для статистики (сделаем позже)
+function openStats() {
+    alert("Статистика появится в следующем обновлении! (Тут будет твой график)");
+}
+// Открыть окно рестарта
+function playAgain() {
+    document.getElementById('restart-modal').style.display = 'flex';
+
+    // Синхронизируем выпадающие списки с тем, что было выбрано в главном меню
+    const mainMode = document.querySelector('input[name="mode"]:checked').value;
+    document.getElementById('restartMode').value = mainMode;
+
+    // Обновляем подрежимы при открытии
+    updateRestartSubmodes(mainMode);
+}
+
+// Закрыть окно рестарта
+function closeRestart() {
+    document.getElementById('restart-modal').style.display = 'none';
+}
+
+// Обновление подрежимов в окне рестарта
+function updateRestartSubmodes(mode) {
+    const select = document.getElementById('restartSubmode');
+    select.innerHTML = "";
+    if (mode === 'sentences') {
+        select.innerHTML = `<option value="ru">Русский язык</option><option value="en">English language</option>`;
+    } else if (mode === 'symbols') {
+        select.innerHTML = `<option value="all">Все символы</option>`;
+    } else if (mode === 'code') {
+        select.innerHTML = `<option value="python">Python</option><option value="js">JavaScript</option><option value="html">HTML/CSS</option>`;
+    }
+}
+
+// Обработчик смены режима в окне рестарта
+document.getElementById('restartMode').addEventListener('change', (e) => {
+    updateRestartSubmodes(e.target.value);
+});
+
+// Быстрый старт с выбранными настройками
+function quickStart(difficulty) {
+    closeRestart();
+
+    // Обновляем радио-кнопки и главный селект, чтобы game знал, что мы выбрали
+    const mode = document.getElementById('restartMode').value;
+    document.querySelector(`input[name="mode"][value="${mode}"]`).checked = true;
+
+    // Вызываем updateSubmodes для главного меню (чтобы там тоже обновилось)
+    updateSubmodes(mode);
+
+    // Устанавливаем подрежим в главном меню (чтобы getTextForLevel взял нужный)
+    const submode = document.getElementById('restartSubmode').value;
+    document.getElementById('submodeSelect').value = submode;
+
+    // Запускаем игру
+    startGame(difficulty);
+}
