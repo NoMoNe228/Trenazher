@@ -71,18 +71,50 @@ const FINGERS = [
 function renderKeyboard(lang) {
     const kb = document.getElementById("keyboard");
     kb.innerHTML = "";
-    LAYOUTS[lang].forEach((row, r) => {
+    
+    const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    
+    // Если выбран режим символов, мы принудительно показываем АНГЛИЙСКУЮ раскладку
+    // (так как спецсимволы в русской раскладке набираются сложнее, и мы их не генерируем)
+    let actualLang = lang;
+    if (currentMode === 'symbols' || currentMode === 'code') {
+        actualLang = 'en';
+    }
+
+    // Специальный массив для верхнего ряда с символами (как на реальной клавиатуре)
+    const SYMBOL_ROW = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
+
+    LAYOUTS[actualLang].forEach((row, r) => {
         const rowEl = document.createElement("div");
         rowEl.className = "kb-row";
-        [...row].forEach((char, i) => {
+        
+        // Если это верхний ряд (r === 0), заменяем цифры на символы для режима "Символы"
+        let currentRow = [...row];
+        if (r === 0 && currentMode === 'symbols') {
+            currentRow = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
+        }
+
+        currentRow.forEach((char, i) => {
             const keyEl = document.createElement("div");
             keyEl.className = `key finger-${FINGERS[r][i]}`;
-            keyEl.textContent = char.toUpperCase();
-            keyEl.dataset.char = char.toLowerCase();
+            
+            // Если это режим символов, мы показываем надписи с Shift (например, @ вместо 2)
+            if (currentMode === 'symbols' && r === 0) {
+                const shifted = ["~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"];
+                keyEl.textContent = shifted[i];
+                keyEl.dataset.char = shifted[i]; // Для подсветки
+                keyEl.dataset.base = char;       // Базовая клавиша (для поиска)
+            } else {
+                keyEl.textContent = char.toUpperCase();
+                keyEl.dataset.char = char.toLowerCase();
+            }
+            
             rowEl.appendChild(keyEl);
         });
         kb.appendChild(rowEl);
     });
+
+    // Пробел
     const spaceRow = document.createElement("div");
     spaceRow.className = "kb-row";
     const spaceKey = document.createElement("div");
@@ -192,7 +224,7 @@ async function startGame(difficulty) {
     document.getElementById('mistakes').textContent = 0;
         currentScore = 0;
     document.getElementById('points').textContent = currentScore;
-    document.getElementById('points').textContent = 0;
+
 
     const timerBox = document.getElementById('timerBox');
     if (difficulty === 'easy' || difficulty === 'medium') {
@@ -208,7 +240,14 @@ async function startGame(difficulty) {
     isGameActive = true;                     // теперь можно печатать
 
     renderText();
-    renderKeyboard('ru');
+        // Определяем язык для клавиатуры в зависимости от режима
+    let kbLang = 'ru';
+    if (document.querySelector('input[name="mode"]:checked').value === 'code') {
+        kbLang = 'en';
+    } else if (document.getElementById('submodeSelect').value === 'en') {
+        kbLang = 'en';
+    }
+    renderKeyboard(kbLang);
     inputField.value = "";
     inputField.focus();
 
