@@ -84,48 +84,33 @@ function renderKeyboard(lang) {
     kb.innerHTML = "";
     
     const currentMode = document.querySelector('input[name="mode"]:checked').value;
-    
-    // В режиме кода всегда английская раскладка, в остальных - выбранная
     let actualLang = lang;
-    if (currentMode === 'code') {
+    if (currentMode === 'symbols' || currentMode === 'code') {
         actualLang = 'en';
     }
-
-    // Карта символов для Shift (чтобы нарисовать их на клавишах сверху)
-    const SHIFT_MAP = {
-        '`': '~', '1': '!', '2': '@', '3': '#', '4': '$', '5': '%', '6': '^', '7': '&', '8': '*', '9': '(', '0': ')', '-': '_', '=': '+',
-        '[': '{', ']': '}', '\\': '|',
-        ';': ':', "'": '"', ',': '<', '.': '>', '/': '?'
-    };
 
     LAYOUTS[actualLang].forEach((row, r) => {
         const rowEl = document.createElement("div");
         rowEl.className = "kb-row";
         
-        [...row].forEach((char, i) => {
+        let currentRow = [...row];
+        if (r === 0 && currentMode === 'symbols') {
+            currentRow = ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
+        }
+
+        currentRow.forEach((char, i) => {
             const keyEl = document.createElement("div");
             keyEl.className = `key finger-${FINGERS[r][i]}`;
             
-            // Если у клавиши есть символ с Shift, рисуем его сверху мелким шрифтом
-            if (SHIFT_MAP[char]) {
-                const topSpan = document.createElement("span");
-                topSpan.className = "key-top";
-                topSpan.textContent = SHIFT_MAP[char];
-                keyEl.appendChild(topSpan);
+            if (currentMode === 'symbols' && r === 0) {
+                const shifted = ["~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"];
+                keyEl.textContent = shifted[i];
+                keyEl.dataset.char = shifted[i];
+                keyEl.dataset.base = char;
+            } else {
+                keyEl.textContent = char.toUpperCase();
+                keyEl.dataset.char = char.toLowerCase();
             }
-            
-            // Основная надпись (буква или цифра)
-            const mainSpan = document.createElement("span");
-            mainSpan.className = "key-main";
-            mainSpan.textContent = char.toUpperCase();
-            keyEl.appendChild(mainSpan);
-            
-            // Сохраняем данные для подсветки
-            keyEl.dataset.char = char.toLowerCase();
-            if (SHIFT_MAP[char]) {
-                keyEl.dataset.shift = SHIFT_MAP[char];
-            }
-            
             rowEl.appendChild(keyEl);
         });
         kb.appendChild(rowEl);
@@ -147,14 +132,20 @@ function highlightKey(char) {
     document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
     if (!char) return;
     
-    // Сначала ищем по точному совпадению символа (например, '@')
-    let keyEl = document.querySelector(`.key[data-shift="${char}"]`);
-    
-    // Если не нашли (например, это просто буква или цифра), ищем по основному символу
-    if (!keyEl) {
-        keyEl = document.querySelector(`.key[data-char="${char.toLowerCase()}"]`);
+    const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    if (currentMode === 'symbols') {
+        const shiftMap = {
+            '~': '`', '!': '1', '@': '2', '#': '3', '$': '4', '%': '5', '^': '6', 
+            '&': '7', '*': '8', '(': '9', ')': '0', '_': '-', '+': '=',
+            '{': '[', '}': ']', ':': ';', '"': "'", '<': ',', '>': '.', '?': '/', '|': '\\'
+        };
+        const baseChar = shiftMap[char] || char.toLowerCase();
+        const keyEl = document.querySelector(`.key[data-base="${baseChar}"]`);
+        if (keyEl) keyEl.classList.add('active');
+        return;
     }
     
+    const keyEl = document.querySelector(`.key[data-char="${char.toLowerCase()}"]`);
     if (keyEl) keyEl.classList.add('active');
 }
 
@@ -171,22 +162,51 @@ function updateSubmodes(mode) {
     }
 }
 
-async function fetchRandomQuote() {
+async function fetchRandomQuote(lang = 'ru') {
     try {
-        const response = await fetch('http://localhost:5001/get_random_quote');
+        const response = await fetch(`http://localhost:5001/get_random_quote?lang=${lang}`);
         if (!response.ok) throw new Error(`Сервер вернул статус ${response.status}`);
         const data = await response.json();
-        if (data && typeof data.quote === 'string') return data.quote; 
+        if (data && data.quote) return data.quote;
     } catch (error) {
-        console.warn('⚠️ Не удалось получить цитату с сервера:', error.message);
+        console.warn('⚠️ Сервер недоступен, беру из data_bases.js:', error.message);
     }
-    return null; 
+    return null;
+}
+
+async function fetchRandomWords(lang) {
+    try {
+        const response = await fetch(`http://localhost:5001/get_random_words?lang=${lang}&count=10`);
+        if (!response.ok) throw new Error(`Сервер вернул статус ${response.status}`);
+        const data = await response.json();
+        if (data && Array.isArray(data.words) && data.words.length > 0) {
+            return data.words.join(" ");
+        }
+    } catch (error) {
+        console.warn('⚠️ Сервер недоступен, беру из data_bases.js:', error.message);
+    }
+    return null;
+}
+
+async function fetchRandomCode(lang) {
+    try {
+        const response = await fetch(`http://localhost:5001/get_random_code?lang=${lang}`);
+        if (!response.ok) throw new Error(`Сервер вернул статус ${response.status}`);
+        const data = await response.json();
+        if (data && data.code) return data.code;
+    } catch (error) {
+        console.warn('⚠️ Сервер недоступен, беру из data_bases.js:', error.message);
+    }
+    return null;
 }
 
 async function getTextForLevel() {
     const mode = document.querySelector('input[name="mode"]:checked').value;
     const submode = document.getElementById('submodeSelect').value;
-    const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const getRandom = (arr) => {
+        if (!arr || arr.length === 0) return null;
+        return arr[Math.floor(Math.random() * arr.length)];
+    };
 
     if (mode === 'symbols') {
         const chars = "!@#$%^&*()_+-=[]{};':\",./<>?1234567890";
@@ -194,23 +214,46 @@ async function getTextForLevel() {
         for (let i = 0; i < 30; i++) res += chars[Math.floor(Math.random() * chars.length)];
         return res;
     } else if (mode === 'code') {
-        if (submode === 'python') return getRandom(library.code_python);
-        if (submode === 'js')     return getRandom(library.code_js);
-        if (submode === 'html')   return getRandom(library.code_html);
+        const codeFromServer = await fetchRandomCode(submode);
+        if (codeFromServer) return codeFromServer;
+
+        // Fallback из data_bases.js
+        let codeList = [];
+        if (submode === 'python') codeList = window.FALLBACK_DATA?.code_python || [];
+        if (submode === 'js')     codeList = window.FALLBACK_DATA?.code_java || []; // В базе java, но режим называется js
+        if (submode === 'html')   codeList = window.FALLBACK_DATA?.code_html || [];
+        
+        if (codeList.length > 0) return getRandom(codeList);
+        return "Ошибка: код не найден";
+
     } else if (mode === 'words') {
-        let wordList = (submode === 'ru') ? library.words_ru : library.words_en;
+        const wordsFromServer = await fetchRandomWords(submode);
+        if (wordsFromServer) return wordsFromServer;
+
+        // Fallback из data_bases.js
+        let wordList = (submode === 'ru') 
+            ? (window.FALLBACK_DATA?.words_ru || []) 
+            : (window.FALLBACK_DATA?.words_en || []);
+        
+        if (wordList.length === 0) return "Ошибка: слова не найдены";
+        
         let result = [];
         for (let i = 0; i < 10; i++) result.push(getRandom(wordList));
         return result.join(" ");
+
     } else {
-        if (submode === 'ru') {
-            const quote = await fetchRandomQuote();
-            if (quote) return quote;
-            return getRandom(library.sentences_ru);
-        }
-        if (submode === 'en') return getRandom(library.sentences_en);
+        // Sentences
+        const quoteFromServer = await fetchRandomQuote(submode);
+        if (quoteFromServer) return quoteFromServer;
+
+        // Fallback из data_bases.js
+        let quoteList = (submode === 'ru') 
+            ? (window.FALLBACK_DATA?.quotes_ru || []) 
+            : (window.FALLBACK_DATA?.quotes_en || []);
+        
+        if (quoteList.length > 0) return getRandom(quoteList);
+        return "Ошибка: цитаты не найдены";
     }
-    return "Ошибка генерации";
 }
 
 // --- ИГРА ---

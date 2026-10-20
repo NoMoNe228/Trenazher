@@ -182,30 +182,6 @@
         /* --- ЦВЕТА ДЛЯ ЗАГОЛОВКА "ИГРА ОКОНЧЕНА" --- */
         #game-over h2 { color: #ffffff; }
         body.light-theme #game-over h2 { color: #1e293b; }
-            /* Стили для двух надписей на клавише (буква и символ) */
-        .key {
-            position: relative;
-            flex-direction: column; 
-            align-items: center;
-            justify-content: center;
-            line-height: 1;
-        }
-        .key-top {
-            position: absolute;
-            top: 4px;
-            left: 4px; /* Символ сдвига в левый верхний угол */
-            font-size: 10px;
-            color: #64748b;
-            font-weight: normal;
-        }
-        .key-main {
-            margin-top: 6px; /* Чуть опускаем основную букву */
-            font-size: 14px;
-        }
-        /* В светлой теме цвет верхнего символа делаем темнее */
-        body.light-theme .key-top {
-            color: #475569;
-        }
     </style>
 </head>
 <body>
@@ -410,6 +386,11 @@
             <button onclick="closeStats()" style="background: #475569; color: #fff; width: 100%; padding: 10px; margin-top: 20px;">Закрыть</button>
         </div>
     </div>
+    <script src="quotes.js"></script>
+    <script src="quotes_eng.js"></script>
+    <script src="words_ru.js"></script>
+    <script src="words_eng.js"></script>
+    <script src="data_bases.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
