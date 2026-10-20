@@ -147,20 +147,14 @@ function highlightKey(char) {
     document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
     if (!char) return;
     
-    const currentMode = document.querySelector('input[name="mode"]:checked').value;
+    // Сначала ищем по точному совпадению символа (например, '@')
+    let keyEl = document.querySelector(`.key[data-shift="${char}"]`);
     
-    // В режиме символов ищем по data-char (так как мы записали туда символ с Shift)
-    if (currentMode === 'symbols') {
-        const keyEl = document.querySelector(`.key[data-char="${char}"]`);
-        if (keyEl) {
-            keyEl.classList.add('active');
-            // Дополнительно можно было бы подсветить Shift, но пока просто клавишу
-        }
-        return;
+    // Если не нашли (например, это просто буква или цифра), ищем по основному символу
+    if (!keyEl) {
+        keyEl = document.querySelector(`.key[data-char="${char.toLowerCase()}"]`);
     }
     
-    // Обычный режим (буквы)
-    const keyEl = document.querySelector(`.key[data-char="${char.toLowerCase()}"]`);
     if (keyEl) keyEl.classList.add('active');
 }
 
