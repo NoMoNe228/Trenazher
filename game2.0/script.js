@@ -464,7 +464,7 @@ function saveResult() {
     } else {
         alert(`Твой результат: ${currentScore} очков. Войди в профиль, чтобы копить статистику!`);
     }
-
+     checkAchievements();
     checkLogin();
     restartGame();
 }
