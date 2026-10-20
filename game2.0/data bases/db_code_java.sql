@@ -1,105 +1,106 @@
 CREATE TABLE IF NOT EXISTS java_code (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    text TEXT NOT NULL
+    text TEXT NOT NULL UNIQUE
 );
 
-INSERT INTO java_code (text) VALUES ('System.out.println("Hello, World!");');
-INSERT INTO java_code (text) VALUES ('int x = 5; int y = 10; System.out.println(x + y);');
-INSERT INTO java_code (text) VALUES ('if (x > 0) { System.out.println("Positive"); }');
-INSERT INTO java_code (text) VALUES ('for (int i = 0; i < 5; i++) { System.out.println(i); }');
-INSERT INTO java_code (text) VALUES ('int[] arr = {1, 2, 3, 4, 5};');
-INSERT INTO java_code (text) VALUES ('ArrayList<String> list = new ArrayList<>();');
-INSERT INTO java_code (text) VALUES ('HashMap<String, Integer> map = new HashMap<>();');
-INSERT INTO java_code (text) VALUES ('while (x < 10) { x++; }');
-INSERT INTO java_code (text) VALUES ('String text = "Java"; System.out.println(text.length());');
-INSERT INTO java_code (text) VALUES ('double pi = Math.PI;');
-INSERT INTO java_code (text) VALUES ('boolean flag = true; if (!flag) {}');
-INSERT INTO java_code (text) VALUES ('HashSet<Integer> set = new HashSet<>();');
-INSERT INTO java_code (text) VALUES ('String s = text.toUpperCase();');
-INSERT INTO java_code (text) VALUES ('int val = Integer.parseInt("123");');
-INSERT INTO java_code (text) VALUES ('String valStr = String.valueOf(42);');
-INSERT INTO java_code (text) VALUES ('for (int num : arr) { System.out.println(num); }');
-INSERT INTO java_code (text) VALUES ('StringBuilder sb = new StringBuilder(); sb.append("a");');
-INSERT INTO java_code (text) VALUES ('list.add("apple");');
-INSERT INTO java_code (text) VALUES ('map.put("key", 100);');
-INSERT INTO java_code (text) VALUES ('int size = list.size();');
-INSERT INTO java_code (text) VALUES ('boolean hasKey = map.containsKey("key");');
-INSERT INTO java_code (text) VALUES ('System.out.print("Same line");');
-INSERT INTO java_code (text) VALUES ('double res = Math.pow(2, 3);');
-INSERT INTO java_code (text) VALUES ('double root = Math.sqrt(16);');
-INSERT INTO java_code (text) VALUES ('int rand = (int)(Math.random() * 10);');
-INSERT INTO java_code (text) VALUES ('String sub = text.substring(0, 2);');
-INSERT INTO java_code (text) VALUES ('boolean eq = s1.equals(s2);');
-INSERT INTO java_code (text) VALUES ('boolean eqIgn = s1.equalsIgnoreCase(s2);');
-INSERT INTO java_code (text) VALUES ('char c = text.charAt(0);');
-INSERT INTO java_code (text) VALUES ('int idx = text.indexOf("a");');
-INSERT INTO java_code (text) VALUES ('String trimmed = text.trim();');
-INSERT INTO java_code (text) VALUES ('String rep = text.replace("a", "b");');
-INSERT INTO java_code (text) VALUES ('String[] tokens = text.split(",");');
-INSERT INTO java_code (text) VALUES ('list.clear();');
-INSERT INTO java_code (text) VALUES ('boolean empty = list.isEmpty();');
-INSERT INTO java_code (text) VALUES ('Collections.sort(list);');
-INSERT INTO java_code (text) VALUES ('Arrays.sort(arr);');
-INSERT INTO java_code (text) VALUES ('System.exit(0);');
-INSERT INTO java_code (text) VALUES ('Optional<String> opt = Optional.empty();');
-INSERT INTO java_code (text) VALUES ('list.stream().filter(s -> !s.isEmpty()).count();');
-INSERT INTO java_code (text) VALUES ('File file = new File("test.txt");');
-INSERT INTO java_code (text) VALUES ('Objects.requireNonNull(obj, "Null");');
-INSERT INTO java_code (text) VALUES ('LocalDate date = LocalDate.now();');
-INSERT INTO java_code (text) VALUES ('LocalTime time = LocalTime.now();');
-INSERT INTO java_code (text) VALUES ('LocalDateTime dt = LocalDateTime.now();');
-INSERT INTO java_code (text) VALUES ('UUID uuid = UUID.randomUUID();');
-INSERT INTO java_code (text) VALUES ('long ts = System.currentTimeMillis();');
-INSERT INTO java_code (text) VALUES ('long nano = System.nanoTime();');
-INSERT INTO java_code (text) VALUES ('int code = obj.hashCode();');
-INSERT INTO java_code (text) VALUES ('boolean instance = obj instanceof String;');
-INSERT INTO java_code (text) VALUES ('Class<?> clazz = obj.getClass();');
-INSERT INTO java_code (text) VALUES ('byte[] bytes = "data".getBytes(StandardCharsets.UTF_8);');
-INSERT INTO java_code (text) VALUES ('Path path = Paths.get("a.txt");');
-INSERT INTO java_code (text) VALUES ('Iterator<String> it = list.iterator();');
-INSERT INTO java_code (text) VALUES ('int res = Integer.compare(x, y);');
-INSERT INTO java_code (text) VALUES ('int max = Math.max(x, y);');
-INSERT INTO java_code (text) VALUES ('int min = Math.min(x, y);');
-INSERT INTO java_code (text) VALUES ('int abs = Math.abs(-10);');
-INSERT INTO java_code (text) VALUES ('double ceil = Math.ceil(4.2);');
-INSERT INTO java_code (text) VALUES ('double floor = Math.floor(4.7);');
-INSERT INTO java_code (text) VALUES ('long round = Math.round(4.5);');
-INSERT INTO java_code (text) VALUES ('BigInteger bi = new BigInteger("123456789");');
-INSERT INTO java_code (text) VALUES ('BigDecimal bd = new BigDecimal("10.55");');
-INSERT INTO java_code (text) VALUES ('String lower = text.toLowerCase();');
-INSERT INTO java_code (text) VALUES ('boolean cont = text.contains("abc");');
-INSERT INTO java_code (text) VALUES ('boolean emptyStr = text.isEmpty();');
-INSERT INTO java_code (text) VALUES ('boolean blankStr = text.isBlank();');
-INSERT INTO java_code (text) VALUES ('String joined = String.join("-", "a", "b");');
-INSERT INTO java_code (text) VALUES ('int len = arr.length;');
-INSERT INTO java_code (text) VALUES ('int valOrDef = map.getOrDefault("key", 0);');
-INSERT INTO java_code (text) VALUES ('map.remove("key");');
-INSERT INTO java_code (text) VALUES ('boolean hasVal = map.containsValue(100);');
-INSERT INTO java_code (text) VALUES ('LinkedList<String> ll = new LinkedList<>();');
-INSERT INTO java_code (text) VALUES ('Queue<String> q = new LinkedList<>();');
-INSERT INTO java_code (text) VALUES ('Stack<String> st = new Stack<>();');
-INSERT INTO java_code (text) VALUES ('st.push("a"); String top = st.pop();');
-INSERT INTO java_code (text) VALUES ('q.add("a"); String head = q.poll();');
-INSERT INTO java_code (text) VALUES ('list.remove("apple");');
-INSERT INTO java_code (text) VALUES ('list.set(0, "banana");');
-INSERT INTO java_code (text) VALUES ('String first = list.get(0);');
-INSERT INTO java_code (text) VALUES ('int[][] matrix = new int[2][2];');
-INSERT INTO java_code (text) VALUES ('String formatted = String.format("Val: %d", x);');
-INSERT INTO java_code (text) VALUES ('System.err.println("Error message");');
-INSERT INTO java_code (text) VALUES ('boolean match = text.matches("\\d+");');
-INSERT INTO java_code (text) VALUES ('char[] chars = text.toCharArray();');
-INSERT INTO java_code (text) VALUES ('boolean starts = text.startsWith("a");');
-INSERT INTO java_code (text) VALUES ('boolean ends = text.endsWith("z");');
-INSERT INTO java_code (text) VALUES ('int compare = s1.compareTo(s2);');
-INSERT INTO java_code (text) VALUES ('System.out.printf("Count: %d\n", x);');
-INSERT INTO java_code (text) VALUES ('double randDoc = ThreadLocalRandom.current().nextDouble();');
-INSERT INTO java_code (text) VALUES ('int sign = Long.signum(x);');
-INSERT INTO java_code (text) VALUES ('boolean b = Boolean.parseBoolean("true");');
-INSERT INTO java_code (text) VALUES ('double d = Double.parseDouble("3.14");');
-INSERT INTO java_code (text) VALUES ('long l = Long.parseLong("123456789");');
-INSERT INTO java_code (text) VALUES ('List<String> unmod = List.of("a", "b");');
-INSERT INTO java_code (text) VALUES ('Set<Integer> unmodSet = Set.of(1, 2);');
-INSERT INTO java_code (text) VALUES ('Map<String, String> unmodMap = Map.of("k", "v");');
-INSERT INTO java_code (text) VALUES ('Instant now = Instant.now();');
-INSERT INTO java_code (text) VALUES ('Runtime.getRuntime().gc();');
-INSERT INTO java_code (text) VALUES ('System.out.println("Done!");');
+INSERT OR IGNORE INTO java_code (text) VALUES 
+('System.out.println("Hello, World!");'),
+('int x = 5; int y = 10; System.out.println(x + y);'),
+('if (x > 0) { System.out.println("Positive"); }'),
+('for (int i = 0; i < 5; i++) { System.out.println(i); }'),
+('int[] arr = {1, 2, 3, 4, 5};'),
+('ArrayList<String> list = new ArrayList<>();'),
+('HashMap<String, Integer> map = new HashMap<>();'),
+('while (x < 10) { x++; }'),
+('String text = "Java"; System.out.println(text.length());'),
+('double pi = Math.PI;'),
+('boolean flag = true; if (!flag) {}'),
+('HashSet<Integer> set = new HashSet<>();'),
+('String s = text.toUpperCase();'),
+('int val = Integer.parseInt("123");'),
+('String valStr = String.valueOf(42);'),
+('for (int num : arr) { System.out.println(num); }'),
+('StringBuilder sb = new StringBuilder(); sb.append("a");'),
+('list.add("apple");'),
+('map.put("key", 100);'),
+('int size = list.size();'),
+('boolean hasKey = map.containsKey("key");'),
+('System.out.print("Same line");'),
+('double res = Math.pow(2, 3);'),
+('double root = Math.sqrt(16);'),
+('int rand = (int)(Math.random() * 10);'),
+('String sub = text.substring(0, 2);'),
+('boolean eq = s1.equals(s2);'),
+('boolean eqIgn = s1.equalsIgnoreCase(s2);'),
+('char c = text.charAt(0);'),
+('int idx = text.indexOf("a");'),
+('String trimmed = text.trim();'),
+('String rep = text.replace("a", "b");'),
+('String[] tokens = text.split(",");'),
+('list.clear();'),
+('boolean empty = list.isEmpty();'),
+('Collections.sort(list);'),
+('Arrays.sort(arr);'),
+('System.exit(0);'),
+('Optional<String> opt = Optional.empty();'),
+('list.stream().filter(s -> !s.isEmpty()).count();'),
+('File file = new File("test.txt");'),
+('Objects.requireNonNull(obj, "Null");'),
+('LocalDate date = LocalDate.now();'),
+('LocalTime time = LocalTime.now();'),
+('LocalDateTime dt = LocalDateTime.now();'),
+('UUID uuid = UUID.randomUUID();'),
+('long ts = System.currentTimeMillis();'),
+('long nano = System.nanoTime();'),
+('int code = obj.hashCode();'),
+('boolean instance = obj instanceof String;'),
+('Class<?> clazz = obj.getClass();'),
+('byte[] bytes = "data".getBytes(StandardCharsets.UTF_8);'),
+('Path path = Paths.get("a.txt");'),
+('Iterator<String> it = list.iterator();'),
+('int res = Integer.compare(x, y);'),
+('int max = Math.max(x, y);'),
+('int min = Math.min(x, y);'),
+('int abs = Math.abs(-10);'),
+('double ceil = Math.ceil(4.2);'),
+('double floor = Math.floor(4.7);'),
+('long round = Math.round(4.5);'),
+('BigInteger bi = new BigInteger("123456789");'),
+('BigDecimal bd = new BigDecimal("10.55");'),
+('String lower = text.toLowerCase();'),
+('boolean cont = text.contains("abc");'),
+('boolean emptyStr = text.isEmpty();'),
+('boolean blankStr = text.isBlank();'),
+('String joined = String.join("-", "a", "b");'),
+('int len = arr.length;'),
+('int valOrDef = map.getOrDefault("key", 0);'),
+('map.remove("key");'),
+('boolean hasVal = map.containsValue(100);'),
+('LinkedList<String> ll = new LinkedList<>();'),
+('Queue<String> q = new LinkedList<>();'),
+('Stack<String> st = new Stack<>();'),
+('st.push("a"); String top = st.pop();'),
+('q.add("a"); String head = q.poll();'),
+('list.remove("apple");'),
+('list.set(0, "banana");'),
+('String first = list.get(0);'),
+('int[][] matrix = new int[2][2];'),
+('String formatted = String.format("Val: %d", x);'),
+('System.err.println("Error message");'),
+('boolean match = text.matches("\\d+");'),
+('char[] chars = text.toCharArray();'),
+('boolean starts = text.startsWith("a");'),
+('boolean ends = text.endsWith("z");'),
+('int compare = s1.compareTo(s2);'),
+('System.out.printf("Count: %d\n", x);'),
+('double randDoc = ThreadLocalRandom.current().nextDouble();'),
+('int sign = Long.signum(x);'),
+('boolean b = Boolean.parseBoolean("true");'),
+('double d = Double.parseDouble("3.14");'),
+('long l = Long.parseLong("123456789");'),
+('List<String> unmod = List.of("a", "b");'),
+('Set<Integer> unmodSet = Set.of(1, 2);'),
+('Map<String, String> unmodMap = Map.of("k", "v");'),
+('Instant now = Instant.now();'),
+('Runtime.getRuntime().gc();'),
+('System.out.println("Done!");');

@@ -1,105 +1,73 @@
 CREATE TABLE IF NOT EXISTS html_code (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    text TEXT NOT NULL
+    text TEXT NOT NULL UNIQUE
 );
 
-INSERT INTO html_code (text) VALUES ('<!DOCTYPE html>');
-INSERT INTO html_code (text) VALUES ('<html></html>');
-INSERT INTO html_code (text) VALUES ('<head><title>Page Title</title></head>');
-INSERT INTO html_code (text) VALUES ('<body><h1>Hello World</h1></body>');
-INSERT INTO html_code (text) VALUES ('<p>This is a paragraph.</p>');
-INSERT INTO html_code (text) VALUES ('<a href="https://google.com">Link</a>');
-INSERT INTO html_code (text) VALUES ('<img src="img.jpg" alt="Image">');
-INSERT INTO html_code (text) VALUES ('<br>');
-INSERT INTO html_code (text) VALUES ('<hr>');
-INSERT INTO html_code (text) VALUES ('<strong>Bold Text</strong>');
-INSERT INTO html_code (text) VALUES ('<em>Italic Text</em>');
-INSERT INTO html_code (text) VALUES ('<div class="container"></div>');
-INSERT INTO html_code (text) VALUES ('<span id="highlight">text</span>');
-INSERT INTO html_code (text) VALUES ('<ul><li>Item</li></ul>');
-INSERT INTO html_code (text) VALUES ('<ol><li>First</li></ol>');
-INSERT INTO html_code (text) VALUES ('<!-- This is a comment -->');
-INSERT INTO html_code (text) VALUES ('<form action="/submit" method="POST"></form>');
-INSERT INTO html_code (text) VALUES ('<input type="text" name="user" placeholder="Login">');
-INSERT INTO html_code (text) VALUES ('<input type="password" name="pass">');
-INSERT INTO html_code (text) VALUES ('<input type="submit" value="Send">');
-INSERT INTO html_code (text) VALUES ('<button type="button">Click Me</button>');
-INSERT INTO html_code (text) VALUES ('<textarea rows="4" cols="50"></textarea>');
-INSERT INTO html_code (text) VALUES ('<select name="cars"><option value="volvo">Volvo</option></select>');
-INSERT INTO html_code (text) VALUES ('<label for="male">Male</label>');
-INSERT INTO html_code (text) VALUES ('<input type="radio" id="male" name="gender" value="male">');
-INSERT INTO html_code (text) VALUES ('<input type="checkbox" id="bike" value="Bike">');
-INSERT INTO html_code (text) VALUES ('<table><tr><th>Header</th></tr></table>');
-INSERT INTO html_code (text) VALUES ('<tr><td>Data</td></tr>');
-INSERT INTO html_code (text) VALUES ('<meta charset="UTF-8">');
-INSERT INTO html_code (text) VALUES ('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
-INSERT INTO html_code (text) VALUES ('<link rel="stylesheet" href="style.css">');
-INSERT INTO html_code (text) VALUES ('<script src="script.js"></script>');
-INSERT INTO html_code (text) VALUES ('<style>body { background-color: #fff; }</style>');
-INSERT INTO html_code (text) VALUES ('console.log(''hi'');');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('Heading 2');
-INSERT INTO html_code (text) VALUES ('Heading 3');
-INSERT INTO html_code (text) VALUES ('Heading 4');
-INSERT INTO html_code (text) VALUES ('Heading 5');
-INSERT INTO html_code (text) VALUES ('Heading 6');
-INSERT INTO html_code (text) VALUES ('Quote');
-INSERT INTO html_code (text) VALUES ('Formatted text');
-INSERT INTO html_code (text) VALUES ('code block');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('Title');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('2/10');
-INSERT INTO html_code (text) VALUES ('OpenContent');
-INSERT INTO html_code (text) VALUES ('Open window');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('Cap');
-INSERT INTO html_code (text) VALUES ('Valentine''s Day');
-INSERT INTO html_code (text) VALUES ('Highlighted text');
-INSERT INTO html_code (text) VALUES ('Deleted text');
-INSERT INTO html_code (text) VALUES ('Inserted text');
-INSERT INTO html_code (text) VALUES ('Subscript');
-INSERT INTO html_code (text) VALUES ('Superscript');
-INSERT INTO html_code (text) VALUES ('Smaller text');
-INSERT INTO html_code (text) VALUES ('HTML');
-INSERT INTO html_code (text) VALUES ('Right-to-left text');
-INSERT INTO html_code (text) VALUES ('Definition');
-INSERT INTO html_code (text) VALUES ('Ctrl + C');
-INSERT INTO html_code (text) VALUES ('Sample output from program');
-INSERT INTO html_code (text) VALUES ('x = y + 2');
-INSERT INTO html_code (text) VALUES ('Call Us');
-INSERT INTO html_code (text) VALUES ('Email Us');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('Your browser does not support JavaScript!');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('Hover over me');
-INSERT INTO html_code (text) VALUES ('This paragraph is hidden');
-INSERT INTO html_code (text) VALUES ('Editable text');
-INSERT INTO html_code (text) VALUES ('Draggable paragraph');
-INSERT INTO html_code (text) VALUES ('');
-INSERT INTO html_code (text) VALUES ('');
+INSERT OR IGNORE INTO html_code (text) VALUES 
+('<!DOCTYPE html>'),
+('<html></html>'),
+('<head><title>Page Title</title></head>'),
+('<body><h1>Hello World</h1></body>'),
+('<p>This is a paragraph.</p>'),
+('<a href="https://google.com">Link</a>'),
+('<img src="img.jpg" alt="Image">'),
+('<br>'),
+('<hr>'),
+('<strong>Bold Text</strong>'),
+('<em>Italic Text</em>'),
+('<div class="container"></div>'),
+('<span id="highlight">text</span>'),
+('<ul><li>Item</li></ul>'),
+('<ol><li>First</li></ol>'),
+('<!-- This is a comment -->'),
+('<form action="/submit" method="POST"></form>'),
+('<input type="text" name="user" placeholder="Login">'),
+('<input type="password" name="pass">'),
+('<input type="submit" value="Send">'),
+('<button type="button">Click Me</button>'),
+('<textarea rows="4" cols="50"></textarea>'),
+('<select name="cars"><option value="volvo">Volvo</option></select>'),
+('<label for="male">Male</label>'),
+('<input type="radio" id="male" name="gender" value="male">'),
+('<input type="checkbox" id="bike" value="Bike">'),
+('<table><tr><th>Header</th></tr></table>'),
+('<tr><td>Data</td></tr>'),
+('<meta charset="UTF-8">'),
+('<meta name="viewport" content="width=device-width, initial-scale=1.0">'),
+('<link rel="stylesheet" href="style.css">'),
+('<script src="script.js"></script>'),
+('<style>body { background-color: #fff; }</style>'),
+('console.log(''hi'');'),
+('Heading 2'),
+('Heading 3'),
+('Heading 4'),
+('Heading 5'),
+('Heading 6'),
+('Quote'),
+('Formatted text'),
+('code block'),
+('Title'),
+('2/10'),
+('OpenContent'),
+('Open window'),
+('Cap'),
+('Valentine''s Day'),
+('Highlighted text'),
+('Deleted text'),
+('Inserted text'),
+('Subscript'),
+('Superscript'),
+('Smaller text'),
+('HTML'),
+('Right-to-left text'),
+('Definition'),
+('Ctrl + C'),
+('Sample output from program'),
+('x = y + 2'),
+('Call Us'),
+('Email Us'),
+('Your browser does not support JavaScript!'),
+('Hover over me'),
+('This paragraph is hidden'),
+('Editable text'),
+('Draggable paragraph');

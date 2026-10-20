@@ -1,504 +1,55 @@
-CREATE TABLE IF NOT EXISTS english_words (
+CREATE TABLE IF NOT EXISTS words_en (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    text TEXT NOT NULL
+    text TEXT NOT NULL UNIQUE
 );
 
-INSERT INTO english_words (text) VALUES ('home');
-INSERT INTO english_words (text) VALUES ('time');
-INSERT INTO english_words (text) VALUES ('book');
-INSERT INTO english_words (text) VALUES ('city');
-INSERT INTO english_words (text) VALUES ('life');
-INSERT INTO english_words (text) VALUES ('work');
-INSERT INTO english_words (text) VALUES ('people');
-INSERT INTO english_words (text) VALUES ('word');
-INSERT INTO english_words (text) VALUES ('new');
-INSERT INTO english_words (text) VALUES ('hand');
-INSERT INTO english_words (text) VALUES ('eye');
-INSERT INTO english_words (text) VALUES ('friend');
-INSERT INTO english_words (text) VALUES ('place');
-INSERT INTO english_words (text) VALUES ('face');
-INSERT INTO english_words (text) VALUES ('earth');
-INSERT INTO english_words (text) VALUES ('head');
-INSERT INTO english_words (text) VALUES ('case');
-INSERT INTO english_words (text) VALUES ('car');
-INSERT INTO english_words (text) VALUES ('water');
-INSERT INTO english_words (text) VALUES ('father');
-INSERT INTO english_words (text) VALUES ('day');
-INSERT INTO english_words (text) VALUES ('night');
-INSERT INTO english_words (text) VALUES ('window');
-INSERT INTO english_words (text) VALUES ('door');
-INSERT INTO english_words (text) VALUES ('end');
-INSERT INTO english_words (text) VALUES ('start');
-INSERT INTO english_words (text) VALUES ('light');
-INSERT INTO english_words (text) VALUES ('evening');
-INSERT INTO english_words (text) VALUES ('morning');
-INSERT INTO english_words (text) VALUES ('hour');
-INSERT INTO english_words (text) VALUES ('minute');
-INSERT INTO english_words (text) VALUES ('month');
-INSERT INTO english_words (text) VALUES ('year');
-INSERT INTO english_words (text) VALUES ('way');
-INSERT INTO english_words (text) VALUES ('forest');
-INSERT INTO english_words (text) VALUES ('river');
-INSERT INTO english_words (text) VALUES ('sea');
-INSERT INTO english_words (text) VALUES ('mountain');
-INSERT INTO english_words (text) VALUES ('sky');
-INSERT INTO english_words (text) VALUES ('sun');
-INSERT INTO english_words (text) VALUES ('wind');
-INSERT INTO english_words (text) VALUES ('rain');
-INSERT INTO english_words (text) VALUES ('snow');
-INSERT INTO english_words (text) VALUES ('winter');
-INSERT INTO english_words (text) VALUES ('summer');
-INSERT INTO english_words (text) VALUES ('autumn');
-INSERT INTO english_words (text) VALUES ('spring');
-INSERT INTO english_words (text) VALUES ('bird');
-INSERT INTO english_words (text) VALUES ('animal');
-INSERT INTO english_words (text) VALUES ('fish');
-INSERT INTO english_words (text) VALUES ('tree');
-INSERT INTO english_words (text) VALUES ('flower');
-INSERT INTO english_words (text) VALUES ('grass');
-INSERT INTO english_words (text) VALUES ('leaf');
-INSERT INTO english_words (text) VALUES ('stone');
-INSERT INTO english_words (text) VALUES ('sand');
-INSERT INTO english_words (text) VALUES ('fire');
-INSERT INTO english_words (text) VALUES ('smoke');
-INSERT INTO english_words (text) VALUES ('air');
-INSERT INTO english_words (text) VALUES ('bread');
-INSERT INTO english_words (text) VALUES ('milk');
-INSERT INTO english_words (text) VALUES ('meat');
-INSERT INTO english_words (text) VALUES ('sugar');
-INSERT INTO english_words (text) VALUES ('salt');
-INSERT INTO english_words (text) VALUES ('tea');
-INSERT INTO english_words (text) VALUES ('coffee');
-INSERT INTO english_words (text) VALUES ('juice');
-INSERT INTO english_words (text) VALUES ('pie');
-INSERT INTO english_words (text) VALUES ('porridge');
-INSERT INTO english_words (text) VALUES ('table');
-INSERT INTO english_words (text) VALUES ('chair');
-INSERT INTO english_words (text) VALUES ('closet');
-INSERT INTO english_words (text) VALUES ('shelf');
-INSERT INTO english_words (text) VALUES ('carpet');
-INSERT INTO english_words (text) VALUES ('wall');
-INSERT INTO english_words (text) VALUES ('floor');
-INSERT INTO english_words (text) VALUES ('ceiling');
-INSERT INTO english_words (text) VALUES ('key');
-INSERT INTO english_words (text) VALUES ('lock');
-INSERT INTO english_words (text) VALUES ('knife');
-INSERT INTO english_words (text) VALUES ('fork');
-INSERT INTO english_words (text) VALUES ('spoon');
-INSERT INTO english_words (text) VALUES ('cup');
-INSERT INTO english_words (text) VALUES ('plate');
-INSERT INTO english_words (text) VALUES ('pen');
-INSERT INTO english_words (text) VALUES ('pencil');
-INSERT INTO english_words (text) VALUES ('paper');
-INSERT INTO english_words (text) VALUES ('notebook');
-INSERT INTO english_words (text) VALUES ('map');
-INSERT INTO english_words (text) VALUES ('bag');
-INSERT INTO english_words (text) VALUES ('backpack');
-INSERT INTO english_words (text) VALUES ('hat');
-INSERT INTO english_words (text) VALUES ('jacket');
-INSERT INTO english_words (text) VALUES ('coat');
-INSERT INTO english_words (text) VALUES ('shoes');
-INSERT INTO english_words (text) VALUES ('sock');
-INSERT INTO english_words (text) VALUES ('pants');
-INSERT INTO english_words (text) VALUES ('skirt');
-INSERT INTO english_words (text) VALUES ('dress');
-INSERT INTO english_words (text) VALUES ('school');
-INSERT INTO english_words (text) VALUES ('class');
-INSERT INTO english_words (text) VALUES ('lesson');
-INSERT INTO english_words (text) VALUES ('student');
-INSERT INTO english_words (text) VALUES ('teacher');
-INSERT INTO english_words (text) VALUES ('task');
-INSERT INTO english_words (text) VALUES ('example');
-INSERT INTO english_words (text) VALUES ('number');
-INSERT INTO english_words (text) VALUES ('letter');
-INSERT INTO english_words (text) VALUES ('sound');
-INSERT INTO english_words (text) VALUES ('language');
-INSERT INTO english_words (text) VALUES ('topic');
-INSERT INTO english_words (text) VALUES ('line');
-INSERT INTO english_words (text) VALUES ('law');
-INSERT INTO english_words (text) VALUES ('rule');
-INSERT INTO english_words (text) VALUES ('science');
-INSERT INTO english_words (text) VALUES ('thought');
-INSERT INTO english_words (text) VALUES ('mind');
-INSERT INTO english_words (text) VALUES ('soul');
-INSERT INTO english_words (text) VALUES ('heart');
-INSERT INTO english_words (text) VALUES ('feeling');
-INSERT INTO english_words (text) VALUES ('voice');
-INSERT INTO english_words (text) VALUES ('song');
-INSERT INTO english_words (text) VALUES ('dance');
-INSERT INTO english_words (text) VALUES ('theater');
-INSERT INTO english_words (text) VALUES ('cinema');
-INSERT INTO english_words (text) VALUES ('movie');
-INSERT INTO english_words (text) VALUES ('actor');
-INSERT INTO english_words (text) VALUES ('stage');
-INSERT INTO english_words (text) VALUES ('music');
-INSERT INTO english_words (text) VALUES ('noise');
-INSERT INTO english_words (text) VALUES ('silence');
-INSERT INTO english_words (text) VALUES ('peace');
-INSERT INTO english_words (text) VALUES ('game');
-INSERT INTO english_words (text) VALUES ('sport');
-INSERT INTO english_words (text) VALUES ('match');
-INSERT INTO english_words (text) VALUES ('ball');
-INSERT INTO english_words (text) VALUES ('team');
-INSERT INTO english_words (text) VALUES ('player');
-INSERT INTO english_words (text) VALUES ('score');
-INSERT INTO english_words (text) VALUES ('victory');
-INSERT INTO english_words (text) VALUES ('success');
-INSERT INTO english_words (text) VALUES ('luck');
-INSERT INTO english_words (text) VALUES ('chance');
-INSERT INTO english_words (text) VALUES ('risk');
-INSERT INTO english_words (text) VALUES ('fear');
-INSERT INTO english_words (text) VALUES ('joy');
-INSERT INTO english_words (text) VALUES ('sadness');
-INSERT INTO english_words (text) VALUES ('tears');
-INSERT INTO english_words (text) VALUES ('laughter');
-INSERT INTO english_words (text) VALUES ('smile');
-INSERT INTO english_words (text) VALUES ('joke');
-INSERT INTO english_words (text) VALUES ('truth');
-INSERT INTO english_words (text) VALUES ('lie');
-INSERT INTO english_words (text) VALUES ('secret');
-INSERT INTO english_words (text) VALUES ('memory');
-INSERT INTO english_words (text) VALUES ('dream');
-INSERT INTO english_words (text) VALUES ('goal');
-INSERT INTO english_words (text) VALUES ('plan');
-INSERT INTO english_words (text) VALUES ('project');
-INSERT INTO english_words (text) VALUES ('scheme');
-INSERT INTO english_words (text) VALUES ('model');
-INSERT INTO english_words (text) VALUES ('shape');
-INSERT INTO english_words (text) VALUES ('color');
-INSERT INTO english_words (text) VALUES ('paint');
-INSERT INTO english_words (text) VALUES ('white');
-INSERT INTO english_words (text) VALUES ('black');
-INSERT INTO english_words (text) VALUES ('red');
-INSERT INTO english_words (text) VALUES ('blue');
-INSERT INTO english_words (text) VALUES ('yellow');
-INSERT INTO english_words (text) VALUES ('green');
-INSERT INTO english_words (text) VALUES ('gray');
-INSERT INTO english_words (text) VALUES ('shadow');
-INSERT INTO english_words (text) VALUES ('company');
-INSERT INTO english_words (text) VALUES ('factory');
-INSERT INTO english_words (text) VALUES ('office');
-INSERT INTO english_words (text) VALUES ('store');
-INSERT INTO english_words (text) VALUES ('goods');
-INSERT INTO english_words (text) VALUES ('price');
-INSERT INTO english_words (text) VALUES ('money');
-INSERT INTO english_words (text) VALUES ('bank');
-INSERT INTO english_words (text) VALUES ('card');
-INSERT INTO english_words (text) VALUES ('credit');
-INSERT INTO english_words (text) VALUES ('debt');
-INSERT INTO english_words (text) VALUES ('tax');
-INSERT INTO english_words (text) VALUES ('business');
-INSERT INTO english_words (text) VALUES ('market');
-INSERT INTO english_words (text) VALUES ('deal');
-INSERT INTO english_words (text) VALUES ('purchase');
-INSERT INTO english_words (text) VALUES ('sale');
-INSERT INTO english_words (text) VALUES ('client');
-INSERT INTO english_words (text) VALUES ('guest');
-INSERT INTO english_words (text) VALUES ('neighbor');
-INSERT INTO english_words (text) VALUES ('family');
-INSERT INTO english_words (text) VALUES ('mother');
-INSERT INTO english_words (text) VALUES ('brother');
-INSERT INTO english_words (text) VALUES ('sister');
-INSERT INTO english_words (text) VALUES ('son');
-INSERT INTO english_words (text) VALUES ('daughter');
-INSERT INTO english_words (text) VALUES ('child');
-INSERT INTO english_words (text) VALUES ('baby');
-INSERT INTO english_words (text) VALUES ('guy');
-INSERT INTO english_words (text) VALUES ('girl');
-INSERT INTO english_words (text) VALUES ('man');
-INSERT INTO english_words (text) VALUES ('woman');
-INSERT INTO english_words (text) VALUES ('people');
-INSERT INTO english_words (text) VALUES ('nation');
-INSERT INTO english_words (text) VALUES ('country');
-INSERT INTO english_words (text) VALUES ('land');
-INSERT INTO english_words (text) VALUES ('region');
-INSERT INTO english_words (text) VALUES ('district');
-INSERT INTO english_words (text) VALUES ('village');
-INSERT INTO english_words (text) VALUES ('street');
-INSERT INTO english_words (text) VALUES ('square');
-INSERT INTO english_words (text) VALUES ('park');
-INSERT INTO english_words (text) VALUES ('garden');
-INSERT INTO english_words (text) VALUES ('yard');
-INSERT INTO english_words (text) VALUES ('bridge');
-INSERT INTO english_words (text) VALUES ('road');
-INSERT INTO english_words (text) VALUES ('highway');
-INSERT INTO english_words (text) VALUES ('train');
-INSERT INTO english_words (text) VALUES ('metro');
-INSERT INTO english_words (text) VALUES ('bus');
-INSERT INTO english_words (text) VALUES ('tram');
-INSERT INTO english_words (text) VALUES ('taxi');
-INSERT INTO english_words (text) VALUES ('plane');
-INSERT INTO english_words (text) VALUES ('ship');
-INSERT INTO english_words (text) VALUES ('boat');
-INSERT INTO english_words (text) VALUES ('flight');
-INSERT INTO english_words (text) VALUES ('ticket');
-INSERT INTO english_words (text) VALUES ('baggage');
-INSERT INTO english_words (text) VALUES ('station');
-INSERT INTO english_words (text) VALUES ('port');
-INSERT INTO english_words (text) VALUES ('hotel');
-INSERT INTO english_words (text) VALUES ('room');
-INSERT INTO english_words (text) VALUES ('cafe');
-INSERT INTO english_words (text) VALUES ('bar');
-INSERT INTO english_words (text) VALUES ('club');
-INSERT INTO english_words (text) VALUES ('museum');
-INSERT INTO english_words (text) VALUES ('gallery');
-INSERT INTO english_words (text) VALUES ('picture');
-INSERT INTO english_words (text) VALUES ('drawing');
-INSERT INTO english_words (text) VALUES ('photo');
-INSERT INTO english_words (text) VALUES ('camera');
-INSERT INTO english_words (text) VALUES ('screen');
-INSERT INTO english_words (text) VALUES ('radio');
-INSERT INTO english_words (text) VALUES ('press');
-INSERT INTO english_words (text) VALUES ('magazine');
-INSERT INTO english_words (text) VALUES ('article');
-INSERT INTO english_words (text) VALUES ('author');
-INSERT INTO english_words (text) VALUES ('poet');
-INSERT INTO english_words (text) VALUES ('poem');
-INSERT INTO english_words (text) VALUES ('rhyme');
-INSERT INTO english_words (text) VALUES ('prose');
-INSERT INTO english_words (text) VALUES ('novel');
-INSERT INTO english_words (text) VALUES ('story');
-INSERT INTO english_words (text) VALUES ('plot');
-INSERT INTO english_words (text) VALUES ('hero');
-INSERT INTO english_words (text) VALUES ('style');
-INSERT INTO english_words (text) VALUES ('fashion');
-INSERT INTO english_words (text) VALUES ('clothes');
-INSERT INTO english_words (text) VALUES ('thing');
-INSERT INTO english_words (text) VALUES ('object');
-INSERT INTO english_words (text) VALUES ('detail');
-INSERT INTO english_words (text) VALUES ('part');
-INSERT INTO english_words (text) VALUES ('piece');
-INSERT INTO english_words (text) VALUES ('share');
-INSERT INTO english_words (text) VALUES ('percent');
-INSERT INTO english_words (text) VALUES ('sum');
-INSERT INTO english_words (text) VALUES ('result');
-INSERT INTO english_words (text) VALUES ('effect');
-INSERT INTO english_words (text) VALUES ('benefit');
-INSERT INTO english_words (text) VALUES ('harm');
-INSERT INTO english_words (text) VALUES ('disease');
-INSERT INTO english_words (text) VALUES ('doctor');
-INSERT INTO english_words (text) VALUES ('pharmacy');
-INSERT INTO english_words (text) VALUES ('medicine');
-INSERT INTO english_words (text) VALUES ('pain');
-INSERT INTO english_words (text) VALUES ('injury');
-INSERT INTO english_words (text) VALUES ('wound');
-INSERT INTO english_words (text) VALUES ('blood');
-INSERT INTO english_words (text) VALUES ('body');
-INSERT INTO english_words (text) VALUES ('skin');
-INSERT INTO english_words (text) VALUES ('hair');
-INSERT INTO english_words (text) VALUES ('tooth');
-INSERT INTO english_words (text) VALUES ('nose');
-INSERT INTO english_words (text) VALUES ('mouth');
-INSERT INTO english_words (text) VALUES ('ear');
-INSERT INTO english_words (text) VALUES ('neck');
-INSERT INTO english_words (text) VALUES ('shoulder');
-INSERT INTO english_words (text) VALUES ('chest');
-INSERT INTO english_words (text) VALUES ('stomach');
-INSERT INTO english_words (text) VALUES ('leg');
-INSERT INTO english_words (text) VALUES ('finger');
-INSERT INTO english_words (text) VALUES ('bone');
-INSERT INTO english_words (text) VALUES ('muscle');
-INSERT INTO english_words (text) VALUES ('force');
-INSERT INTO english_words (text) VALUES ('energy');
-INSERT INTO english_words (text) VALUES ('wire');
-INSERT INTO english_words (text) VALUES ('network');
-INSERT INTO english_words (text) VALUES ('internet');
-INSERT INTO english_words (text) VALUES ('site');
-INSERT INTO english_words (text) VALUES ('blog');
-INSERT INTO english_words (text) VALUES ('mail');
-INSERT INTO english_words (text) VALUES ('letter');
-INSERT INTO english_words (text) VALUES ('packet');
-INSERT INTO english_words (text) VALUES ('box');
-INSERT INTO english_words (text) VALUES ('barrel');
-INSERT INTO english_words (text) VALUES ('bucket');
-INSERT INTO english_words (text) VALUES ('bottle');
-INSERT INTO english_words (text) VALUES ('glass');
-INSERT INTO english_words (text) VALUES ('mug');
-INSERT INTO english_words (text) VALUES ('axe');
-INSERT INTO english_words (text) VALUES ('saw');
-INSERT INTO english_words (text) VALUES ('hammer');
-INSERT INTO english_words (text) VALUES ('nail');
-INSERT INTO english_words (text) VALUES ('screw');
-INSERT INTO english_words (text) VALUES ('bolt');
-INSERT INTO english_words (text) VALUES ('nut');
-INSERT INTO english_words (text) VALUES ('glue');
-INSERT INTO english_words (text) VALUES ('tape');
-INSERT INTO english_words (text) VALUES ('thread');
-INSERT INTO english_words (text) VALUES ('needle');
-INSERT INTO english_words (text) VALUES ('fabric');
-INSERT INTO english_words (text) VALUES ('wool');
-INSERT INTO english_words (text) VALUES ('silk');
-INSERT INTO english_words (text) VALUES ('cotton');
-INSERT INTO english_words (text) VALUES ('leather');
-INSERT INTO english_words (text) VALUES ('fur');
-INSERT INTO english_words (text) VALUES ('boot');
-INSERT INTO english_words (text) VALUES ('belt');
-INSERT INTO english_words (text) VALUES ('buckle');
-INSERT INTO english_words (text) VALUES ('ring');
-INSERT INTO english_words (text) VALUES ('chain');
-INSERT INTO english_words (text) VALUES ('watch');
-INSERT INTO english_words (text) VALUES ('bracelet');
-INSERT INTO english_words (text) VALUES ('glasses');
-INSERT INTO english_words (text) VALUES ('lens');
-INSERT INTO english_words (text) VALUES ('mirror');
-INSERT INTO english_words (text) VALUES ('frame');
-INSERT INTO english_words (text) VALUES ('handle');
-INSERT INTO english_words (text) VALUES ('hinge');
-INSERT INTO english_words (text) VALUES ('brick');
-INSERT INTO english_words (text) VALUES ('concrete');
-INSERT INTO english_words (text) VALUES ('cement');
-INSERT INTO english_words (text) VALUES ('chalk');
-INSERT INTO english_words (text) VALUES ('coal');
-INSERT INTO english_words (text) VALUES ('oil');
-INSERT INTO english_words (text) VALUES ('gas');
-INSERT INTO english_words (text) VALUES ('petrol');
-INSERT INTO english_words (text) VALUES ('fuel');
-INSERT INTO english_words (text) VALUES ('lamp');
-INSERT INTO english_words (text) VALUES ('torch');
-INSERT INTO english_words (text) VALUES ('candle');
-INSERT INTO english_words (text) VALUES ('match');
-INSERT INTO english_words (text) VALUES ('bonfire');
-INSERT INTO english_words (text) VALUES ('stove');
-INSERT INTO english_words (text) VALUES ('oven');
-INSERT INTO english_words (text) VALUES ('kitchen');
-INSERT INTO english_words (text) VALUES ('bathroom');
-INSERT INTO english_words (text) VALUES ('shower');
-INSERT INTO english_words (text) VALUES ('toilet');
-INSERT INTO english_words (text) VALUES ('tap');
-INSERT INTO english_words (text) VALUES ('pipe');
-INSERT INTO english_words (text) VALUES ('hose');
-INSERT INTO english_words (text) VALUES ('pump');
-INSERT INTO english_words (text) VALUES ('filter');
-INSERT INTO english_words (text) VALUES ('soap');
-INSERT INTO english_words (text) VALUES ('foam');
-INSERT INTO english_words (text) VALUES ('shampoo');
-INSERT INTO english_words (text) VALUES ('brush');
-INSERT INTO english_words (text) VALUES ('paste');
-INSERT INTO english_words (text) VALUES ('cream');
-INSERT INTO english_words (text) VALUES ('powder');
-INSERT INTO english_words (text) VALUES ('perfume');
-INSERT INTO english_words (text) VALUES ('smell');
-INSERT INTO english_words (text) VALUES ('taste');
-INSERT INTO english_words (text) VALUES ('pepper');
-INSERT INTO english_words (text) VALUES ('mustard');
-INSERT INTO english_words (text) VALUES ('vinegar');
-INSERT INTO english_words (text) VALUES ('sauce');
-INSERT INTO english_words (text) VALUES ('ketchup');
-INSERT INTO english_words (text) VALUES ('tomato');
-INSERT INTO english_words (text) VALUES ('cucumber');
-INSERT INTO english_words (text) VALUES ('salad');
-INSERT INTO english_words (text) VALUES ('cabbage');
-INSERT INTO english_words (text) VALUES ('carrot');
-INSERT INTO english_words (text) VALUES ('beet');
-INSERT INTO english_words (text) VALUES ('onion');
-INSERT INTO english_words (text) VALUES ('garlic');
-INSERT INTO english_words (text) VALUES ('greens');
-INSERT INTO english_words (text) VALUES ('dill');
-INSERT INTO english_words (text) VALUES ('parsley');
-INSERT INTO english_words (text) VALUES ('mushroom');
-INSERT INTO english_words (text) VALUES ('berry');
-INSERT INTO english_words (text) VALUES ('cherry');
-INSERT INTO english_words (text) VALUES ('plum');
-INSERT INTO english_words (text) VALUES ('pear');
-INSERT INTO english_words (text) VALUES ('apple');
-INSERT INTO english_words (text) VALUES ('lemon');
-INSERT INTO english_words (text) VALUES ('orange');
-INSERT INTO english_words (text) VALUES ('banana');
-INSERT INTO english_words (text) VALUES ('nut');
-INSERT INTO english_words (text) VALUES ('peanut');
-INSERT INTO english_words (text) VALUES ('seed');
-INSERT INTO english_words (text) VALUES ('grain');
-INSERT INTO english_words (text) VALUES ('flour');
-INSERT INTO english_words (text) VALUES ('dough');
-INSERT INTO english_words (text) VALUES ('pancake');
-INSERT INTO english_words (text) VALUES ('waffles');
-INSERT INTO english_words (text) VALUES ('cookie');
-INSERT INTO english_words (text) VALUES ('candy');
-INSERT INTO english_words (text) VALUES ('chocolate');
-INSERT INTO english_words (text) VALUES ('cake');
-INSERT INTO english_words (text) VALUES ('honey');
-INSERT INTO english_words (text) VALUES ('jam');
-INSERT INTO english_words (text) VALUES ('syrup');
-INSERT INTO english_words (text) VALUES ('ice');
-INSERT INTO english_words (text) VALUES ('cold');
-INSERT INTO english_words (text) VALUES ('heat');
-INSERT INTO english_words (text) VALUES ('warmth');
-INSERT INTO english_words (text) VALUES ('comfort');
-INSERT INTO english_words (text) VALUES ('furniture');
-INSERT INTO english_words (text) VALUES ('design');
-INSERT INTO english_words (text) VALUES ('repair');
-INSERT INTO english_words (text) VALUES ('finish');
-INSERT INTO english_words (text) VALUES ('hello');
-INSERT INTO english_words (text) VALUES ('goodbye');
-INSERT INTO english_words (text) VALUES ('please');
-INSERT INTO english_words (text) VALUES ('thanks');
-INSERT INTO english_words (text) VALUES ('sorry');
-INSERT INTO english_words (text) VALUES ('happy');
-INSERT INTO english_words (text) VALUES ('green');
-INSERT INTO english_words (text) VALUES ('yellow');
-INSERT INTO english_words (text) VALUES ('orange');
-INSERT INTO english_words (text) VALUES ('purple');
-INSERT INTO english_words (text) VALUES ('pink');
-INSERT INTO english_words (text) VALUES ('brown');
-INSERT INTO english_words (text) VALUES ('silver');
-INSERT INTO english_words (text) VALUES ('gold');
-INSERT INTO english_words (text) VALUES ('heavy');
-INSERT INTO english_words (text) VALUES ('light');
-INSERT INTO english_words (text) VALUES ('dark');
-INSERT INTO english_words (text) VALUES ('bright');
-INSERT INTO english_words (text) VALUES ('soft');
-INSERT INTO english_words (text) VALUES ('hard');
-INSERT INTO english_words (text) VALUES ('smooth');
-INSERT INTO english_words (text) VALUES ('rough');
-INSERT INTO english_words (text) VALUES ('clean');
-INSERT INTO english_words (text) VALUES ('dirty');
-INSERT INTO english_words (text) VALUES ('fresh');
-INSERT INTO english_words (text) VALUES ('stale');
-INSERT INTO english_words (text) VALUES ('sweet');
-INSERT INTO english_words (text) VALUES ('sour');
-INSERT INTO english_words (text) VALUES ('bitter');
-INSERT INTO english_words (text) VALUES ('salty');
-INSERT INTO english_words (text) VALUES ('hot');
-INSERT INTO english_words (text) VALUES ('cold');
-INSERT INTO english_words (text) VALUES ('warm');
-INSERT INTO english_words (text) VALUES ('cool');
-INSERT INTO english_words (text) VALUES ('loud');
-INSERT INTO english_words (text) VALUES ('quiet');
-INSERT INTO english_words (text) VALUES ('silent');
-INSERT INTO english_words (text) VALUES ('fast');
-INSERT INTO english_words (text) VALUES ('slow');
-INSERT INTO english_words (text) VALUES ('quick');
-INSERT INTO english_words (text) VALUES ('rapid');
-INSERT INTO english_words (text) VALUES ('sudden');
-INSERT INTO english_words (text) VALUES ('early');
-INSERT INTO english_words (text) VALUES ('late');
-INSERT INTO english_words (text) VALUES ('young');
-INSERT INTO english_words (text) VALUES ('old');
-INSERT INTO english_words (text) VALUES ('new');
-INSERT INTO english_words (text) VALUES ('ancient');
-INSERT INTO english_words (text) VALUES ('modern');
-INSERT INTO english_words (text) VALUES ('future');
-INSERT INTO english_words (text) VALUES ('past');
-INSERT INTO english_words (text) VALUES ('present');
-INSERT INTO english_words (text) VALUES ('daily');
-INSERT INTO english_words (text) VALUES ('weekly');
-INSERT INTO english_words (text) VALUES ('strong');
-INSERT INTO english_words (text) VALUES ('weak');
-INSERT INTO english_words (text) VALUES ('brave');
-INSERT INTO english_words (text) VALUES ('clever');
-INSERT INTO english_words (text) VALUES ('smart');
-INSERT INTO english_words (text) VALUES ('wise');
-INSERT INTO english_words (text) VALUES ('foolish');
-INSERT INTO english_words (text) VALUES ('honest');
-INSERT INTO english_words (text) VALUES ('polite');
-INSERT INTO english_words (text) VALUES ('kind');
-INSERT INTO english_words (text) VALUES ('cruel');
-INSERT INTO english_words (text) VALUES ('proud');
-INSERT INTO english_words (text) VALUES ('humble');
-INSERT INTO english_words (text) VALUES ('rich');
-INSERT INTO english_words (text) VALUES ('poor');
-INSERT INTO english_words (text) VALUES ('famous');
-INSERT INTO english_words (text) VALUES ('simple');
-INSERT INTO english_words (text) VALUES ('grand');
-INSERT INTO english_words (text) VALUES ('noble');
-INSERT INTO english_words (text) VALUES ('final');
+INSERT OR IGNORE INTO words_en (text) VALUES 
+('home'), ('time'), ('book'), ('city'), ('life'), ('work'), ('people'), ('word'), ('new'), ('hand'), 
+('eye'), ('friend'), ('place'), ('face'), ('earth'), ('head'), ('case'), ('car'), ('water'), ('father'), 
+('day'), ('night'), ('window'), ('door'), ('end'), ('start'), ('light'), ('evening'), ('morning'), ('hour'), 
+('minute'), ('month'), ('year'), ('way'), ('forest'), ('river'), ('sea'), ('mountain'), ('sky'), ('sun'), 
+('wind'), ('rain'), ('snow'), ('winter'), ('summer'), ('autumn'), ('spring'), ('bird'), ('animal'), ('fish'), 
+('tree'), ('flower'), ('grass'), ('leaf'), ('stone'), ('sand'), ('fire'), ('smoke'), ('air'), ('bread'), 
+('milk'), ('meat'), ('sugar'), ('salt'), ('tea'), ('coffee'), ('juice'), ('pie'), ('porridge'), ('table'), 
+('chair'), ('closet'), ('shelf'), ('carpet'), ('wall'), ('floor'), ('ceiling'), ('key'), ('lock'), ('knife'), 
+('fork'), ('spoon'), ('cup'), ('plate'), ('pen'), ('pencil'), ('paper'), ('notebook'), ('map'), ('bag'), 
+('backpack'), ('hat'), ('jacket'), ('coat'), ('shoes'), ('sock'), ('pants'), ('skirt'), ('dress'), ('school'), 
+('class'), ('lesson'), ('student'), ('teacher'), ('task'), ('example'), ('number'), ('letter'), ('sound'), ('language'), 
+('topic'), ('line'), ('law'), ('rule'), ('science'), ('thought'), ('mind'), ('soul'), ('heart'), ('feeling'), 
+('voice'), ('song'), ('dance'), ('theater'), ('cinema'), ('movie'), ('actor'), ('stage'), ('music'), ('noise'), 
+('silence'), ('peace'), ('game'), ('sport'), ('match'), ('ball'), ('team'), ('player'), ('score'), ('victory'), 
+('success'), ('luck'), ('chance'), ('risk'), ('fear'), ('joy'), ('sadness'), ('tears'), ('laughter'), ('smile'), 
+('joke'), ('truth'), ('lie'), ('secret'), ('memory'), ('dream'), ('goal'), ('plan'), ('project'), ('scheme'), 
+('model'), ('shape'), ('color'), ('paint'), ('white'), ('black'), ('red'), ('blue'), ('yellow'), ('green'), 
+('gray'), ('shadow'), ('company'), ('factory'), ('office'), ('store'), ('goods'), ('price'), ('money'), ('bank'), 
+('card'), ('credit'), ('debt'), ('tax'), ('business'), ('market'), ('deal'), ('purchase'), ('sale'), ('client'), 
+('guest'), ('neighbor'), ('family'), ('mother'), ('brother'), ('sister'), ('son'), ('daughter'), ('child'), ('baby'), 
+('guy'), ('girl'), ('man'), ('woman'), ('nation'), ('country'), ('land'), ('region'), ('district'), ('village'), 
+('street'), ('square'), ('park'), ('garden'), ('yard'), ('bridge'), ('road'), ('highway'), ('train'), ('metro'), 
+('bus'), ('tram'), ('taxi'), ('plane'), ('ship'), ('boat'), ('flight'), ('ticket'), ('baggage'), ('station'), 
+('port'), ('hotel'), ('room'), ('cafe'), ('bar'), ('club'), ('museum'), ('gallery'), ('picture'), ('drawing'), 
+('photo'), ('camera'), ('screen'), ('radio'), ('press'), ('magazine'), ('article'), ('author'), ('poet'), ('poem'), 
+('rhyme'), ('prose'), ('novel'), ('story'), ('plot'), ('hero'), ('style'), ('fashion'), ('clothes'), ('thing'), 
+('object'), ('detail'), ('part'), ('piece'), ('share'), ('percent'), ('sum'), ('result'), ('effect'), ('benefit'), 
+('harm'), ('disease'), ('doctor'), ('pharmacy'), ('medicine'), ('pain'), ('injury'), ('wound'), ('blood'), ('body'), 
+('skin'), ('hair'), ('tooth'), ('nose'), ('mouth'), ('ear'), ('neck'), ('shoulder'), ('chest'), ('stomach'), 
+('leg'), ('finger'), ('bone'), ('muscle'), ('force'), ('energy'), ('wire'), ('network'), ('internet'), ('site'), 
+('blog'), ('mail'), ('packet'), ('box'), ('barrel'), ('bucket'), ('bottle'), ('glass'), ('mug'), ('axe'), 
+('saw'), ('hammer'), ('nail'), ('screw'), ('bolt'), ('nut'), ('glue'), ('tape'), ('thread'), ('needle'), 
+('fabric'), ('wool'), ('silk'), ('cotton'), ('leather'), ('fur'), ('boot'), ('belt'), ('buckle'), ('ring'), 
+('chain'), ('watch'), ('bracelet'), ('glasses'), ('lens'), ('mirror'), ('frame'), ('handle'), ('hinge'), ('brick'), 
+('concrete'), ('cement'), ('chalk'), ('coal'), ('oil'), ('gas'), ('petrol'), ('fuel'), ('lamp'), ('torch'), 
+('candle'), ('match'), ('bonfire'), ('stove'), ('oven'), ('kitchen'), ('bathroom'), ('shower'), ('toilet'), ('tap'), 
+('pipe'), ('hose'), ('pump'), ('filter'), ('soap'), ('foam'), ('shampoo'), ('brush'), ('paste'), ('cream'), 
+('powder'), ('perfume'), ('smell'), ('taste'), ('pepper'), ('mustard'), ('vinegar'), ('sauce'), ('ketchup'), ('tomato'), 
+('cucumber'), ('salad'), ('cabbage'), ('carrot'), ('beet'), ('onion'), ('garlic'), ('greens'), ('dill'), ('parsley'), 
+('mushroom'), ('berry'), ('cherry'), ('plum'), ('pear'), ('apple'), ('lemon'), ('orange'), ('banana'), ('peanut'), 
+('seed'), ('grain'), ('flour'), ('dough'), ('pancake'), ('waffles'), ('cookie'), ('candy'), ('chocolate'), ('cake'), 
+('honey'), ('jam'), ('syrup'), ('ice'), ('cold'), ('heat'), ('warmth'), ('comfort'), ('furniture'), ('design'), 
+('repair'), ('finish'), ('hello'), ('goodbye'), ('please'), ('thanks'), ('sorry'), ('happy'), ('purple'), ('pink'), 
+('brown'), ('silver'), ('gold'), ('heavy'), ('dark'), ('bright'), ('soft'), ('hard'), ('smooth'), ('rough'), 
+('clean'), ('dirty'), ('fresh'), ('stale'), ('sweet'), ('sour'), ('bitter'), ('salty'), ('hot'), ('warm'), 
+('cool'), ('loud'), ('quiet'), ('silent'), ('fast'), ('slow'), ('quick'), ('rapid'), ('sudden'), ('early'), 
+('late'), ('young'), ('old'), ('ancient'), ('modern'), ('future'), ('past'), ('present'), ('daily'), ('weekly'), 
+('strong'), ('weak'), ('brave'), ('clever'), ('smart'), ('wise'), ('foolish'), ('honest'), ('polite'), ('kind'), 
+('cruel'), ('proud'), ('humble'), ('rich'), ('poor'), ('famous'), ('simple'), ('grand'), ('noble'), ('final');

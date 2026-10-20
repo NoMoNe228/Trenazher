@@ -1,105 +1,106 @@
 CREATE TABLE IF NOT EXISTS python_code (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    text TEXT NOT NULL
+    text TEXT NOT NULL UNIQUE
 );
 
-INSERT INTO python_code (text) VALUES ('print(''Hello, World!'')');
-INSERT INTO python_code (text) VALUES ('x = 5; y = 10; print(x + y)');
-INSERT INTO python_code (text) VALUES ('if x > 0: print(''Positive'')');
-INSERT INTO python_code (text) VALUES ('for i in range(5): print(i)');
-INSERT INTO python_code (text) VALUES ('greet = lambda name: f''Hello, {name}''');
-INSERT INTO python_code (text) VALUES ('my_list = []');
-INSERT INTO python_code (text) VALUES ('my_dict = {''name'': ''Alice'', ''age'': 25}');
-INSERT INTO python_code (text) VALUES ('while x < 10: x += 1');
-INSERT INTO python_code (text) VALUES ('res = [x**2 for x in range(10)]');
-INSERT INTO python_code (text) VALUES ('import math; print(math.pi)');
-INSERT INTO python_code (text) VALUES ('print(type(42))');
-INSERT INTO python_code (text) VALUES ('text = ''Python''.upper()');
-INSERT INTO python_code (text) VALUES ('is_valid = True; print(not is_valid)');
-INSERT INTO python_code (text) VALUES ('print(len(text))');
-INSERT INTO python_code (text) VALUES ('import json; data = json.loads(''{"a": 1}'')');
-INSERT INTO python_code (text) VALUES ('print(''Yes'' if x > 5 else ''No'')');
-INSERT INTO python_code (text) VALUES ('import os; print(os.getcwd())');
-INSERT INTO python_code (text) VALUES ('from datetime import datetime; print(datetime.now())');
-INSERT INTO python_code (text) VALUES ('x = None; print(x is None)');
-INSERT INTO python_code (text) VALUES ('print(f''Value: {x}'')');
-INSERT INTO python_code (text) VALUES ('a, b = b, a');
-INSERT INTO python_code (text) VALUES ('matrix = [3 for _ in range(3)]');
-INSERT INTO python_code (text) VALUES ('import sys; sys.exit()');
-INSERT INTO python_code (text) VALUES ('text = '' hello ''.strip()');
-INSERT INTO python_code (text) VALUES ('words = ''a,b,c''.split('','')');
-INSERT INTO python_code (text) VALUES ('joined = ''-''.join([''a'', ''b'', ''c''])');
-INSERT INTO python_code (text) VALUES ('print(any([True, False, False]))');
-INSERT INTO python_code (text) VALUES ('print(all([True, True, False]))');
-INSERT INTO python_code (text) VALUES ('import random; num = random.randint(1, 10)');
-INSERT INTO python_code (text) VALUES ('my_list.append(6)');
-INSERT INTO python_code (text) VALUES ('my_list.pop(0)');
-INSERT INTO python_code (text) VALUES ('res = sorted(my_list)');
-INSERT INTO python_code (text) VALUES ('my_list.reverse()');
-INSERT INTO python_code (text) VALUES ('import time; time.sleep(1)');
-INSERT INTO python_code (text) VALUES ('print(isinstance(''abc'', str))');
-INSERT INTO python_code (text) VALUES ('print(abs(-5))');
-INSERT INTO python_code (text) VALUES ('print(round(3.14159, 2))');
-INSERT INTO python_code (text) VALUES ('print(min(5, 10, 2))');
-INSERT INTO python_code (text) VALUES ('print(max(5, 10, 2))');
-INSERT INTO python_code (text) VALUES ('print(pow(2, 3))');
-INSERT INTO python_code (text) VALUES ('print(''apple'' in [''apple'', ''banana''])');
-INSERT INTO python_code (text) VALUES ('print(bin(10))');
-INSERT INTO python_code (text) VALUES ('print(hex(255))');
-INSERT INTO python_code (text) VALUES ('print(oct(8))');
-INSERT INTO python_code (text) VALUES ('print(chr(97))');
-INSERT INTO python_code (text) VALUES ('print(ord(''a''))');
-INSERT INTO python_code (text) VALUES ('import collections; d = collections.deque()');
-INSERT INTO python_code (text) VALUES ('from collections import Counter; c = Counter(''abcabc'')');
-INSERT INTO python_code (text) VALUES ('import re; match = re.search(r''\d+'', ''abc123'')');
-INSERT INTO python_code (text) VALUES ('import uuid; print(uuid.uuid4())');
-INSERT INTO python_code (text) VALUES ('import hashlib; print(hashlib.sha256(b''data'').hexdigest())');
-INSERT INTO python_code (text) VALUES ('print(dir(object))');
-INSERT INTO python_code (text) VALUES ('print(callable(print))');
-INSERT INTO python_code (text) VALUES ('print(id(x))');
-INSERT INTO python_code (text) VALUES ('print(hash(''abc''))');
-INSERT INTO python_code (text) VALUES ('import base64; b64 = base64.b64encode(b''hello'')');
-INSERT INTO python_code (text) VALUES ('import math; print(math.sqrt(16))');
-INSERT INTO python_code (text) VALUES ('import math; print(math.ceil(4.2))');
-INSERT INTO python_code (text) VALUES ('import math; print(math.floor(4.7))');
-INSERT INTO python_code (text) VALUES ('print(''''.join(reversed(''abc'')))');
-INSERT INTO python_code (text) VALUES ('filtered = list(filter(lambda x: x > 0, [-1, 0, 1]))');
-INSERT INTO python_code (text) VALUES ('mapped = list(map(lambda x: x * 2, [1]))');
-INSERT INTO python_code (text) VALUES ('from functools import reduce; res = reduce(lambda x, y: x+y, [1])');
-INSERT INTO python_code (text) VALUES ('print(sum([1]))');
-INSERT INTO python_code (text) VALUES ('print(list(range(0, 10, 2)))');
-INSERT INTO python_code (text) VALUES ('import statistics; print(statistics.mean([1]))');
-INSERT INTO python_code (text) VALUES ('import calendar; print(calendar.isleap(2024))');
-INSERT INTO python_code (text) VALUES ('print(''abc''.isalpha())');
-INSERT INTO python_code (text) VALUES ('print(''123''.isdigit())');
-INSERT INTO python_code (text) VALUES ('print(''abc123''.isalnum())');
-INSERT INTO python_code (text) VALUES ('print(''abc''.islower())');
-INSERT INTO python_code (text) VALUES ('print(''ABC''.isupper())');
-INSERT INTO python_code (text) VALUES ('print('' ''.isspace())');
-INSERT INTO python_code (text) VALUES ('print(''Hello World''.istitle())');
-INSERT INTO python_code (text) VALUES ('print(''abc''.startswith(''a''))');
-INSERT INTO python_code (text) VALUES ('print(''abc''.endswith(''c''))');
-INSERT INTO python_code (text) VALUES ('print(''abc''.find(''b''))');
-INSERT INTO python_code (text) VALUES ('print(''abc''.count(''a''))');
-INSERT INTO python_code (text) VALUES ('print(''a''.zfill(3))');
-INSERT INTO python_code (text) VALUES ('print(''abc''.replace(''a'', ''z''))');
-INSERT INTO python_code (text) VALUES ('my_set = {1, 2, 3}; my_set.add(4)');
-INSERT INTO python_code (text) VALUES ('my_set.remove(1)');
-INSERT INTO python_code (text) VALUES ('print({1, 2} | {2, 3})');
-INSERT INTO python_code (text) VALUES ('print({1, 2} & {2, 3})');
-INSERT INTO python_code (text) VALUES ('print({1, 2} - {2, 3})');
-INSERT INTO python_code (text) VALUES ('print({1, 2} ^ {2, 3})');
-INSERT INTO python_code (text) VALUES ('print(dict.fromkeys([''a'', ''b''], 0))');
-INSERT INTO python_code (text) VALUES ('print(list(enumerate([''a'', ''b''])))');
-INSERT INTO python_code (text) VALUES ('print(list(zip([''a'', ''b''], [1])))');
-INSERT INTO python_code (text) VALUES ('import copy; new_list = copy.copy(python_blocks)');
-INSERT INTO python_code (text) VALUES ('import sys; print(sys.version)');
-INSERT INTO python_code (text) VALUES ('import sys; print(sys.platform)');
-INSERT INTO python_code (text) VALUES ('import platform; print(platform.system())');
-INSERT INTO python_code (text) VALUES ('import time; print(time.time())');
-INSERT INTO python_code (text) VALUES ('import time; print(time.ctime())');
-INSERT INTO python_code (text) VALUES ('open(''out.txt'', ''w'').write(''ok'')');
-INSERT INTO python_code (text) VALUES ('print(open(''out.txt'').read())');
-INSERT INTO python_code (text) VALUES ('import shutil; shutil.copy(''a.txt'', ''b.txt'')');
-INSERT INTO python_code (text) VALUES ('import glob; print(glob.glob(''*.py''))');
-INSERT INTO python_code (text) VALUES ('print(''Done!'')');
+INSERT OR IGNORE INTO python_code (text) VALUES 
+('print(''Hello, World!'')'),
+('x = 5; y = 10; print(x + y)'),
+('if x > 0: print(''Positive'')'),
+('for i in range(5): print(i)'),
+('greet = lambda name: f''Hello, {name}'''),
+('my_list = []'),
+('my_dict = {''name'': ''Alice'', ''age'': 25}'),
+('while x < 10: x += 1'),
+('res = [x**2 for x in range(10)]'),
+('import math; print(math.pi)'),
+('print(type(42))'),
+('text = ''Python''.upper()'),
+('is_valid = True; print(not is_valid)'),
+('print(len(text))'),
+('import json; data = json.loads(''{"a": 1}'')'),
+('print(''Yes'' if x > 5 else ''No'')'),
+('import os; print(os.getcwd())'),
+('from datetime import datetime; print(datetime.now())'),
+('x = None; print(x is None)'),
+('print(f''Value: {x}'')'),
+('a, b = b, a'),
+('matrix = [3 for _ in range(3)]'),
+('import sys; sys.exit()'),
+('text = '' hello ''.strip()'),
+('words = ''a,b,c''.split('','')'),
+('joined = ''-''.join([''a'', ''b'', ''c''])'),
+('print(any([True, False, False]))'),
+('print(all([True, True, False]))'),
+('import random; num = random.randint(1, 10)'),
+('my_list.append(6)'),
+('my_list.pop(0)'),
+('res = sorted(my_list)'),
+('my_list.reverse()'),
+('import time; time.sleep(1)'),
+('print(isinstance(''abc'', str))'),
+('print(abs(-5))'),
+('print(round(3.14159, 2))'),
+('print(min(5, 10, 2))'),
+('print(max(5, 10, 2))'),
+('print(pow(2, 3))'),
+('print(''apple'' in [''apple'', ''banana''])'),
+('print(bin(10))'),
+('print(hex(255))'),
+('print(oct(8))'),
+('print(chr(97))'),
+('print(ord(''a''))'),
+('import collections; d = collections.deque()'),
+('from collections import Counter; c = Counter(''abcabc'')'),
+('import re; match = re.search(r''\d+'', ''abc123'')'),
+('import uuid; print(uuid.uuid4())'),
+('import hashlib; print(hashlib.sha256(b''data'').hexdigest())'),
+('print(dir(object))'),
+('print(callable(print))'),
+('print(id(x))'),
+('print(hash(''abc''))'),
+('import base64; b64 = base64.b64encode(b''hello'')'),
+('import math; print(math.sqrt(16))'),
+('import math; print(math.ceil(4.2))'),
+('import math; print(math.floor(4.7))'),
+('print(''''.join(reversed(''abc'')))'),
+('filtered = list(filter(lambda x: x > 0, [-1, 0, 1]))'),
+('mapped = list(map(lambda x: x * 2, [1]))'),
+('from functools import reduce; res = reduce(lambda x, y: x+y, [1])'),
+('print(sum([1]))'),
+('print(list(range(0, 10, 2)))'),
+('import statistics; print(statistics.mean([1]))'),
+('import calendar; print(calendar.isleap(2024))'),
+('print(''abc''.isalpha())'),
+('print(''123''.isdigit())'),
+('print(''abc123''.isalnum())'),
+('print(''abc''.islower())'),
+('print(''ABC''.isupper())'),
+('print('' ''.isspace())'),
+('print(''Hello World''.istitle())'),
+('print(''abc''.startswith(''a''))'),
+('print(''abc''.endswith(''c''))'),
+('print(''abc''.find(''b''))'),
+('print(''abc''.count(''a''))'),
+('print(''a''.zfill(3))'),
+('print(''abc''.replace(''a'', ''z''))'),
+('my_set = {1, 2, 3}; my_set.add(4)'),
+('my_set.remove(1)'),
+('print({1, 2} | {2, 3})'),
+('print({1, 2} & {2, 3})'),
+('print({1, 2} - {2, 3})'),
+('print({1, 2} ^ {2, 3})'),
+('print(dict.fromkeys([''a'', ''b''], 0))'),
+('print(list(enumerate([''a'', ''b''])))'),
+('print(list(zip([''a'', ''b''], [1])))'),
+('import copy; new_list = copy.copy(python_blocks)'),
+('import sys; print(sys.version)'),
+('import sys; print(sys.platform)'),
+('import platform; print(platform.system())'),
+('import time; print(time.time())'),
+('import time; print(time.ctime())'),
+('open(''out.txt'', ''w'').write(''ok'')'),
+('print(open(''out.txt'').read())'),
+('import shutil; shutil.copy(''a.txt'', ''b.txt'')'),
+('import glob; print(glob.glob(''*.py''))'),
+('print(''Done!'')');
