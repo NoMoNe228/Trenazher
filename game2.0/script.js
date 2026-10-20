@@ -171,7 +171,7 @@ async function startGame(difficulty) {
     document.getElementById('mistakes').textContent = 0;
         currentScore = 0;
     document.getElementById('points').textContent = currentScore;
-    document.getElementById('points').textContent = 0;
+
 
     const timerBox = document.getElementById('timerBox');
     if (difficulty === 'easy' || difficulty === 'medium') {
