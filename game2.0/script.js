@@ -22,16 +22,16 @@ const library = {
         "fire", "time", "water", "green", "quick", "brown", "fox", "jumps", "lazy"
     ],
     code_python: [
-        "def hello_world():\n    print('Hello, world!')",
-        "for i in range(5):\n    print(i)",
-        "numbers = [x ** 2 for x in range(10)]\nprint(sum(numbers))"
+        "def hello_world(): print('Hello, world!')",
+        "for i in range(5): print(i)",
+        "numbers = [x ** 2 for x in range(10)] print(sum(numbers))"
     ],
     code_js: [
-        "const sum = (a, b) => a + b;\nconsole.log(sum(2, 3));",
-        "for (let i = 0; i < 10; i++) {\n  console.log(i * 2);\n}"
+        "const sum = (a, b) => a + b; console.log(sum(2, 3));",
+        "for (let i = 0; i < 10; i++) {console.log(i * 2);}"
     ],
     code_html: [
-        "<div class='container'>\n  <h1>Hello</h1>\n</div>",
+        "<div class='container'><h1>Hello</h1></div>",
         "<button onclick='alert(1)'>Click me</button>"
     ]
 };
